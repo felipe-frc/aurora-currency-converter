@@ -1,3 +1,5 @@
+[![CI (Front-end)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml)
+
 # 💱 Aurora Currency Converter
 
 Aplicação web moderna para conversão de moedas em tempo real, com interface sofisticada, histórico de operações e foco em experiência do usuário.
