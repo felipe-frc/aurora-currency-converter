@@ -6,7 +6,7 @@ Aplicação web moderna para conversão de moedas em tempo real, com interface s
 
 ## 🌐 Acesse o Projeto
 
-👉 (adicione aqui o link do deploy quando publicar — Vercel recomendado)
+👉 https://aurora-currency-converter.vercel.app/
 
 ---
 
