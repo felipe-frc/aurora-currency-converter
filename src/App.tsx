@@ -1,4 +1,4 @@
-import { Toaster } from "@/components/ui/sonner";
+import { Sonner } from "@/components/ui/sonner";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -19,7 +19,7 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
-        <Toaster />
+       <Sonner />
         <Router />
       </ThemeProvider>
     </ErrorBoundary>
