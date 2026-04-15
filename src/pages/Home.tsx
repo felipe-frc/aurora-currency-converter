@@ -15,20 +15,24 @@ import { toast } from "sonner";
 
 const API_URL = "https://api.exchangerate-api.com/v4/latest/";
 
+// CDN do Twemoji para emojis de alta definição
+const TWEMOJI_CDN = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg";
+
 const MAX_HISTORY_LENGTH = 50;
 const MAX_FAVORITES_LENGTH = 20;
 
+// Mapeamento de moedas para emojis de bandeira (Unicode)
 const CURRENCIES = [
-  { code: "ARS", name: "Peso Argentino", flag: "🇦🇷" },
-  { code: "AUD", name: "Dólar Australiano", flag: "🇦🇺" },
-  { code: "BRL", name: "Real Brasileiro", flag: "🇧🇷" },
-  { code: "CAD", name: "Dólar Canadense", flag: "🇨🇦" },
-  { code: "CHF", name: "Franco Suíço", flag: "🇨🇭" },
-  { code: "CNY", name: "Yuan Chinês", flag: "🇨🇳" },
-  { code: "EUR", name: "Euro", flag: "🇪🇺" },
-  { code: "GBP", name: "Libra Esterlina", flag: "🇬🇧" },
-  { code: "JPY", name: "Iene Japonês", flag: "🇯🇵" },
-  { code: "USD", name: "Dólar Americano", flag: "🇺🇸" },
+  { code: "ARS", name: "Peso Argentino", emoji: "🇦🇷", emojiCode: "1f1e6-1f1f7" },
+  { code: "AUD", name: "Dólar Australiano", emoji: "🇦🇺", emojiCode: "1f1e6-1f1fa" },
+  { code: "BRL", name: "Real Brasileiro", emoji: "🇧🇷", emojiCode: "1f1e7-1f1f7" },
+  { code: "CAD", name: "Dólar Canadense", emoji: "🇨🇦", emojiCode: "1f1e8-1f1e6" },
+  { code: "CHF", name: "Franco Suíço", emoji: "🇨🇭", emojiCode: "1f1e8-1f1ed" },
+  { code: "CNY", name: "Yuan Chinês", emoji: "🇨🇳", emojiCode: "1f1e8-1f1f3" },
+  { code: "EUR", name: "Euro", emoji: "🇪🇺", emojiCode: "1f1ea-1f1fa" },
+  { code: "GBP", name: "Libra Esterlina", emoji: "🇬🇧", emojiCode: "1f1ec-1f1e7" },
+  { code: "JPY", name: "Iene Japonês", emoji: "🇯🇵", emojiCode: "1f1ef-1f1f5" },
+  { code: "USD", name: "Dólar Americano", emoji: "🇺🇸", emojiCode: "1f1fa-1f1f8" },
 ];
 
 interface ConversionResult {
@@ -256,12 +260,27 @@ export default function Home() {
     setResult(null);
   }, []);
 
-  const getCurrencyFlag = useCallback((code: string) => {
-    return CURRENCIES.find((c) => c.code === code)?.flag || "💱";
-  }, []);
+  const getFlagImage = (code: string, size: string = "w-8 h-8") => {
+    const currency = CURRENCIES.find((c) => c.code === code);
+    if (!currency) return null;
+    
+    return (
+      <img
+        src={`${TWEMOJI_CDN}/${currency.emojiCode}.svg`}
+        alt={`Bandeira de ${currency.name}`}
+        className={`${size} rounded-md object-cover drop-shadow-lg`}
+        loading="lazy"
+        style={{ imageRendering: "crisp-edges" }}
+      />
+    );
+  };
 
   const getCurrencyLabel = useCallback((code: string) => {
     return CURRENCIES.find((c) => c.code === code)?.name || code;
+  }, []);
+
+  const getCurrencyCode = useCallback((code: string) => {
+    return code;
   }, []);
 
   return (
@@ -318,8 +337,8 @@ export default function Home() {
                 >
                   <SelectValue>
                     <span className="flex items-center gap-3">
-                      <span className="text-2xl">{getCurrencyFlag(fromCurrency)}</span>
-                      <span>{fromCurrency}</span>
+                      {getFlagImage(fromCurrency, "w-7 h-7")}
+                      <span className="text-sm font-medium">{getCurrencyCode(fromCurrency)}</span>
                     </span>
                   </SelectValue>
                 </SelectTrigger>
@@ -337,7 +356,7 @@ export default function Home() {
                       className="cursor-pointer rounded-lg py-3 focus:bg-cyan-500/15 focus:text-white"
                     >
                       <span className="flex items-center gap-3">
-                        <span className="text-xl">{curr.flag}</span>
+                        {getFlagImage(curr.code, "w-6 h-6")}
                         <span className="font-semibold">{curr.code}</span>
                         <span className="text-xs text-gray-400">({curr.name})</span>
                       </span>
@@ -347,18 +366,16 @@ export default function Home() {
               </Select>
             </div>
 
-            <div className="flex items-end justify-center md:pb-[2px]">
-              <Button
-                onClick={swapCurrencies}
-                variant="outline"
-                size="icon"
-                className="rounded-full border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-500/10 h-12 w-12 transition-all duration-200"
-              >
-                <ArrowRightLeft className="h-5 w-5 text-cyan-400" />
-              </Button>
-            </div>
+            <Button
+              onClick={swapCurrencies}
+              variant="ghost"
+              size="icon"
+              className="bg-white/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white rounded-full transition-all duration-200 mx-auto"
+            >
+              <ArrowRightLeft className="h-5 w-5" />
+            </Button>
 
-            <div className="space-y-2 relative z-20">
+            <div className="space-y-2 relative z-10">
               <label className="text-sm font-medium text-indigo-200">Para</label>
               <Select value={toCurrency} onValueChange={setToCurrency}>
                 <SelectTrigger
@@ -370,8 +387,8 @@ export default function Home() {
                 >
                   <SelectValue>
                     <span className="flex items-center gap-3">
-                      <span className="text-2xl">{getCurrencyFlag(toCurrency)}</span>
-                      <span>{toCurrency}</span>
+                      {getFlagImage(toCurrency, "w-7 h-7")}
+                      <span className="text-sm font-medium">{getCurrencyCode(toCurrency)}</span>
                     </span>
                   </SelectValue>
                 </SelectTrigger>
@@ -389,7 +406,7 @@ export default function Home() {
                       className="cursor-pointer rounded-lg py-3 focus:bg-cyan-500/15 focus:text-white"
                     >
                       <span className="flex items-center gap-3">
-                        <span className="text-xl">{curr.flag}</span>
+                        {getFlagImage(curr.code, "w-6 h-6")}
                         <span className="font-semibold">{curr.code}</span>
                         <span className="text-xs text-gray-400">({curr.name})</span>
                       </span>
@@ -400,54 +417,42 @@ export default function Home() {
             </div>
           </div>
 
-          <Button
-            onClick={convertCurrency}
-            disabled={loading}
-            className="w-full text-white font-bold py-6 text-lg rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 glow-cyan"
-            style={{
-              background: "linear-gradient(135deg, #00D9FF 0%, #FF006E 100%)",
-            }}
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-                Convertendo...
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Converter Moeda
-              </span>
-            )}
-          </Button>
-
           {result && (
-            <div
-              className="border border-cyan-500/50 rounded-xl p-6 space-y-3 animate-fade-in"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(255, 0, 110, 0.15) 100%)",
-              }}
-            >
-              <div className="text-center">
-                <p className="text-sm text-indigo-200 mb-2">Resultado</p>
-                <p className="text-3xl font-bold text-white">
-                  {result.result.toFixed(2)}{" "}
-                  <span className="text-cyan-400">{result.to}</span>
-                </p>
-              </div>
-              <div className="border-t border-cyan-500/30 pt-3">
-                <p className="text-sm text-indigo-300 text-center">
-                  1 {result.from} = {result.rate.toFixed(4)} {result.to}
-                </p>
-              </div>
+            <div className="mt-6 text-center animate-fade-in bg-cyan-500/10 border border-cyan-400/30 rounded-2xl p-6">
+              <p className="text-lg text-indigo-200">
+                {result.amount.toFixed(2)} {getCurrencyLabel(result.from)} é igual a
+              </p>
+              <p className="text-4xl font-bold text-white my-2">
+                {result.result.toFixed(2)} {getCurrencyLabel(result.to)}
+              </p>
+              <p className="text-sm text-indigo-300">
+                Taxa de câmbio: 1 {result.from} = {result.rate.toFixed(4)} {result.to}
+              </p>
             </div>
           )}
 
           <Button
+            onClick={convertCurrency}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-[#00D9FF] to-[#FF006E] text-white font-bold py-3 rounded-xl text-lg hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <span className="ml-2">Convertendo...</span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                <TrendingUp className="h-5 w-5 mr-2" />
+                Converter
+              </div>
+            )}
+          </Button>
+
+          <Button
             onClick={addToFavorites}
             variant="outline"
-            className="w-full border-pink-500/50 hover:border-pink-400 hover:bg-pink-500/10 text-pink-300 transition-all duration-200"
+            className="w-full bg-transparent border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 hover:text-white rounded-xl transition-all duration-200"
           >
             <Star className="h-4 w-4 mr-2" />
             Salvar par como favorito
@@ -478,7 +483,6 @@ export default function Home() {
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
-
           <div className="flex flex-wrap gap-2">
             {favorites.map((fav) => (
               <div
@@ -491,14 +495,15 @@ export default function Home() {
                   className="flex items-center gap-2"
                   title={`Usar ${fav.from} para ${fav.to}`}
                 >
-                  <span className="text-lg">{getCurrencyFlag(fav.from)}</span>
+                  {getFlagImage(fav.from, "w-5 h-5")}
+                  <span className="text-xs font-semibold">{fav.from}</span>
                   <span>→</span>
-                  <span className="text-lg">{getCurrencyFlag(fav.to)}</span>
+                  {getFlagImage(fav.to, "w-5 h-5")}
+                  <span className="text-xs font-semibold">{fav.to}</span>
                   <span className="sr-only">
                     {getCurrencyLabel(fav.from)} para {getCurrencyLabel(fav.to)}
                   </span>
                 </button>
-
                 <button
                   type="button"
                   onClick={() => removeFavorite(fav.from, fav.to)}
@@ -546,10 +551,10 @@ export default function Home() {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-white font-semibold flex items-center gap-2 flex-wrap">
-                      <span className="text-lg">{getCurrencyFlag(item.from)}</span>
+                      {getFlagImage(item.from, "w-5 h-5")}
                       {item.amount.toFixed(2)} {item.from}
                       <span className="text-cyan-400">→</span>
-                      <span className="text-lg">{getCurrencyFlag(item.to)}</span>
+                      {getFlagImage(item.to, "w-5 h-5")}
                       {item.result.toFixed(2)} {item.to}
                     </p>
                     <p className="text-xs text-indigo-300 mt-1">
