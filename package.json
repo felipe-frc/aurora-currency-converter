@@ -2,17 +2,17 @@
   "name": "aurora-currency-converter",
   "version": "1.0.0",
   "description": "Um conversor de moedas sofisticado com design glassmorphism, construído com React 19 e Tailwind CSS 4",
-  "author": "Aurora Currency Converter",
+  "author": "Marcos Felipe França",
   "license": "MIT",
   "private": false,
   "type": "module",
-  "homepage": "https://github.com/seu-usuario/aurora-currency-converter",
+  "homepage": "https://github.com/felipe-frc/aurora-currency-converter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/seu-usuario/aurora-currency-converter.git"
+    "url": "https://github.com/felipe-frc/aurora-currency-converter.git"
   },
   "bugs": {
-    "url": "https://github.com/seu-usuario/aurora-currency-converter/issues"
+    "url": "https://github.com/felipe-frc/aurora-currency-converter/issues"
   },
   "keywords": [
     "currency",
