@@ -194,5 +194,7 @@ Este projeto está sob a licença MIT.
 
 ## 👨‍💻 Autor
 
-**Felipe França**
+**Marcos Felipe França**
+
+[LinkedIn](https://www.linkedin.com/in/marcosfelipefrc) · [GitHub](https://github.com/felipe-frc)
 
