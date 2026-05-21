@@ -13,7 +13,19 @@ import {
 import { ArrowRightLeft, Star, Trash2, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 
-const API_URL = "https://api.exchangerate-api.com/v4/latest/";
+const DEFAULT_API_URL = "https://api.exchangerate-api.com/v4/latest";
+
+const env = import.meta as ImportMeta & {
+  env?: {
+    VITE_EXCHANGE_API_URL?: string;
+  };
+};
+
+const API_URL = (env.env?.VITE_EXCHANGE_API_URL || DEFAULT_API_URL).replace(
+  /\/$/,
+  ""
+);
+
 const TWEMOJI_CDN =
   "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg";
 
@@ -145,6 +157,10 @@ const formatTimestamp = (timestamp: string) => {
   }).format(date);
 };
 
+const buildExchangeUrl = (currencyCode: string) => {
+  return `${API_URL}/${currencyCode}`;
+};
+
 type FlagImageProps = {
   code: string;
   sizeClass?: string;
@@ -219,7 +235,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}${fromCurrency}`);
+      const response = await fetch(buildExchangeUrl(fromCurrency));
 
       if (!response.ok) {
         if (response.status === 404) {
