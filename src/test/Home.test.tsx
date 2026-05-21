@@ -75,4 +75,26 @@ describe("Home", () => {
     expect(within(favoritesSection as HTMLElement).getByText("BRL")).toBeInTheDocument();
     expect(within(favoritesSection as HTMLElement).getByText("USD")).toBeInTheDocument();
   });
+
+  it("deve carregar o histórico salvo no localStorage", async () => {
+    const savedHistory = [
+      {
+        from: "BRL",
+        to: "USD",
+        amount: 100,
+        result: 20,
+        rate: 0.2,
+        timestamp: "2026-05-21T12:00:00.000Z",
+      },
+    ];
+
+    localStorage.setItem("currency_history", JSON.stringify(savedHistory));
+
+    render(<Home />);
+
+    expect(await screen.findByText("Histórico (1/50)")).toBeInTheDocument();
+    expect(screen.getByText(/100.00/)).toBeInTheDocument();
+    expect(screen.getByText(/20.00/)).toBeInTheDocument();
+    expect(screen.getByText("Taxa: 1 BRL = 0.2000 USD")).toBeInTheDocument();
+  });
 });
