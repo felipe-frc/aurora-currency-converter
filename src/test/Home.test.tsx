@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "@/pages/Home";
@@ -44,9 +44,7 @@ describe("Home", () => {
       "https://api.exchangerate-api.com/v4/latest/BRL"
     );
 
-    expect(
-      await screen.findByText("20.00 Dólar Americano")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("20.00 Dólar Americano")).toBeInTheDocument();
 
     expect(
       screen.getByText("Taxa de câmbio: 1 BRL = 0.2000 USD")
@@ -55,5 +53,26 @@ describe("Home", () => {
     await waitFor(() => {
       expect(screen.getByText("Histórico (1/50)")).toBeInTheDocument();
     });
+  });
+
+  it("deve salvar o par de moedas atual como favorito", async () => {
+    const user = userEvent.setup();
+
+    render(<Home />);
+
+    await user.click(
+      screen.getByRole("button", { name: /salvar par como favorito/i })
+    );
+
+    expect(await screen.findByText("Favoritos (1/20)")).toBeInTheDocument();
+
+    const favoritesSection = screen
+      .getByText("Favoritos (1/20)")
+      .closest("div")?.parentElement;
+
+    expect(favoritesSection).toBeTruthy();
+
+    expect(within(favoritesSection as HTMLElement).getByText("BRL")).toBeInTheDocument();
+    expect(within(favoritesSection as HTMLElement).getByText("USD")).toBeInTheDocument();
   });
 });
