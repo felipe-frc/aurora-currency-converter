@@ -126,6 +126,7 @@ aurora-currency-converter/
 │   ├── main.tsx               # Entry point da aplicação
 │   └── index.css              # Estilos globais e variáveis CSS
 │
+├── .env.example               # Exemplo de variável de ambiente da API
 ├── index.html                 # Template HTML
 ├── package.json               # Dependências e scripts
 ├── vite.config.ts             # Configuração do Vite e Vitest
@@ -195,7 +196,33 @@ npm install
 
 ---
 
-### 4. Execute o projeto em modo de desenvolvimento
+### 4. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto com base no arquivo `.env.example`.
+
+No Windows:
+
+```bash
+copy .env.example .env
+```
+
+No Linux/macOS:
+
+```bash
+cp .env.example .env
+```
+
+O arquivo `.env` deve conter:
+
+```env
+VITE_EXCHANGE_API_URL=https://api.exchangerate-api.com/v4/latest
+```
+
+> A API utilizada nesta versão não exige chave de autenticação. A variável acima permite configurar a URL base da API de câmbio usada pela aplicação.
+
+---
+
+### 5. Execute o projeto em modo de desenvolvimento
 
 ```bash
 npm run dev
@@ -217,7 +244,7 @@ http://localhost:5173
 
 ---
 
-### 5. Gere o build de produção (opcional)
+### 6. Gere o build de produção (opcional)
 
 ```bash
 npm run build
@@ -225,7 +252,7 @@ npm run build
 
 ---
 
-### 6. Execute o lint (opcional)
+### 7. Execute o lint (opcional)
 
 ```bash
 npm run lint
@@ -233,7 +260,7 @@ npm run lint
 
 ---
 
-### 7. Execute os testes automatizados (opcional)
+### 8. Execute os testes automatizados (opcional)
 
 Para executar os testes uma única vez:
 
@@ -283,6 +310,8 @@ A configuração dos testes está integrada ao Vite por meio do `vite.config.ts`
 - É necessário acesso à internet para o funcionamento completo da aplicação;
 - Os valores exibidos refletem as cotações em tempo real fornecidas pela API;
 - O histórico e os favoritos são mantidos durante a sessão, sem persistência em banco de dados;
+- A URL base da API pode ser configurada pela variável `VITE_EXCHANGE_API_URL`;
+- O arquivo `.env.example` serve como modelo para configuração local do projeto;
 - Os testes automatizados utilizam mocks para validar comportamentos sem depender da API externa em tempo real.
 
 ---
@@ -309,6 +338,12 @@ O gerenciamento do tema claro/escuro foi implementado com Context API, evitando 
 
 Um componente de ErrorBoundary foi implementado para capturar erros em tempo de execução nos componentes React, exibindo uma tela amigável ao usuário em vez de uma tela em branco, o que melhora a experiência e a robustez da aplicação.
 
+### Variáveis de ambiente
+
+A URL base da API de câmbio foi configurada por meio da variável `VITE_EXCHANGE_API_URL`, documentada no arquivo `.env.example`.
+
+Essa decisão facilita a manutenção do projeto, permite trocar a origem da API sem alterar diretamente o código-fonte e deixa a configuração mais clara para quem clonar o repositório.
+
 ### Vitest + Testing Library
 
 O Vitest foi escolhido por possuir integração nativa com o ecossistema Vite, permitindo executar testes de forma rápida e com configuração simples.
@@ -327,9 +362,11 @@ O deploy na Vercel foi configurado para ser acionado automaticamente a cada atua
 
 ## 🧾 Releases
 
-### v2.2.0 — Testes automatizados e melhorias de confiabilidade
+### v2.2.0 — Testes automatizados e melhorias de confiabilidade **Latest**
 
 Versão focada na implementação da primeira camada de testes automatizados do projeto, com Vitest, Testing Library, ambiente `jsdom`, testes para renderização, conversão, favoritos, histórico, validações e tratamento de erro da API, além da atualização do workflow para executar testes no GitHub Actions.
+
+Também inclui a configuração da variável de ambiente `VITE_EXCHANGE_API_URL` e o arquivo `.env.example`, facilitando a execução local e a manutenção da integração com a API de câmbio.
 
 ### v2.1.0 — Limpeza estrutural e melhorias de manutenção
 
