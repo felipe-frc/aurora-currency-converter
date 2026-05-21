@@ -2,19 +2,22 @@ name: CI (Front-end)
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  build:
+  frontend:
+    name: Validate Front-end
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar código
+      - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      - name: Instalar Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -23,8 +26,14 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      - name: Verificar tipagem
-        run: npx tsc --noEmit
+      - name: Verificar lint
+        run: npm run lint
 
-      - name: Gerar build
+      - name: Verificar tipagem
+        run: npm run type-check
+
+      - name: Executar testes
+        run: npm run test:run
+
+      - name: Gerar build de produção
         run: npm run build
