@@ -97,4 +97,23 @@ describe("Home", () => {
     expect(screen.getByText(/20.00/)).toBeInTheDocument();
     expect(screen.getByText("Taxa: 1 BRL = 0.2000 USD")).toBeInTheDocument();
   });
+
+  it("não deve chamar a API quando o valor informado for inválido", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn();
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<Home />);
+
+    const amountInput = screen.getByLabelText("Valor");
+
+    await user.clear(amountInput);
+    await user.type(amountInput, "0");
+    await user.click(screen.getByRole("button", { name: /converter/i }));
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(screen.queryByText(/Taxa de câmbio:/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Histórico/i)).not.toBeInTheDocument();
+  });
 });
