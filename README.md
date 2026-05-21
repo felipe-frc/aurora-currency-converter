@@ -27,6 +27,7 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Gerenciamento de estado com Context API;
 - Componentização e separação de responsabilidades;
 - Estilização moderna com Tailwind CSS e glassmorphism;
+- Testes automatizados com Vitest e Testing Library;
 - Integração contínua com GitHub Actions;
 - Deploy automatizado com Vercel;
 - Organização profissional de código e documentação para portfólio.
@@ -63,6 +64,16 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Notificações toast para feedback de ações;
 - Alta performance com Vite como bundler.
 
+### 🧪 Testes Automatizados
+
+- Testes de renderização da tela principal;
+- Testes de conversão com API mockada;
+- Testes de favoritos;
+- Testes de carregamento de histórico salvo no `localStorage`;
+- Testes de validação para valor inválido;
+- Testes de tratamento de erro da API;
+- Execução automática dos testes no pipeline de CI.
+
 ---
 
 ## 🛠️ Tecnologias
@@ -77,6 +88,8 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 | Roteamento    | Wouter         |
 | Ícones        | Lucide Icons   |
 | Notificações  | Sonner         |
+| Testes        | Vitest + Testing Library |
+| Ambiente de Testes | jsdom    |
 | Linting       | ESLint         |
 | CI/CD         | GitHub Actions |
 | Deploy        | Vercel         |
@@ -106,13 +119,16 @@ aurora-currency-converter/
 │   ├── pages/                 # Páginas da aplicação
 │   │   ├── Home.tsx           # Página principal com conversor
 │   │   └── NotFound.tsx       # Página 404
+│   ├── test/                  # Configuração e testes automatizados
+│   │   ├── Home.test.tsx      # Testes da página principal
+│   │   └── setup.ts           # Setup global dos testes
 │   ├── App.tsx                # Componente raiz e configuração de rotas
 │   ├── main.tsx               # Entry point da aplicação
 │   └── index.css              # Estilos globais e variáveis CSS
 │
 ├── index.html                 # Template HTML
 ├── package.json               # Dependências e scripts
-├── vite.config.ts             # Configuração do Vite
+├── vite.config.ts             # Configuração do Vite e Vitest
 ├── tsconfig.json              # Configuração TypeScript
 └── eslint.config.js           # Configuração do ESLint
 ```
@@ -217,12 +233,57 @@ npm run lint
 
 ---
 
+### 7. Execute os testes automatizados (opcional)
+
+Para executar os testes uma única vez:
+
+```bash
+npm run test:run
+```
+
+Para executar os testes em modo observação durante o desenvolvimento:
+
+```bash
+npm run test
+```
+
+Para executar os testes com relatório de cobertura:
+
+```bash
+npm run test:coverage
+```
+
+---
+
+## 🧪 Testes Automatizados
+
+O projeto possui testes automatizados configurados com **Vitest**, **Testing Library** e **jsdom**, garantindo mais confiabilidade na evolução da aplicação.
+
+Os testes atuais cobrem os principais comportamentos da página inicial:
+
+- Renderização da tela principal do conversor;
+- Exibição do título, subtítulo, campo de valor e botões principais;
+- Conversão de moedas com retorno de API mockado;
+- Verificação da chamada correta para a API de câmbio;
+- Exibição do resultado da conversão;
+- Exibição da taxa de câmbio utilizada;
+- Registro da conversão no histórico;
+- Salvamento de par de moedas como favorito;
+- Carregamento de histórico salvo no `localStorage`;
+- Validação para impedir conversão com valor inválido;
+- Tratamento de erro quando a API retorna falha.
+
+A configuração dos testes está integrada ao Vite por meio do `vite.config.ts`, utilizando ambiente `jsdom` para simular o navegador durante a execução dos testes.
+
+---
+
 ## ⚠️ Observações
 
 - A conversão depende de uma API externa de câmbio;
 - É necessário acesso à internet para o funcionamento completo da aplicação;
 - Os valores exibidos refletem as cotações em tempo real fornecidas pela API;
-- O histórico e os favoritos são mantidos durante a sessão, sem persistência em banco de dados.
+- O histórico e os favoritos são mantidos durante a sessão, sem persistência em banco de dados;
+- Os testes automatizados utilizam mocks para validar comportamentos sem depender da API externa em tempo real.
 
 ---
 
@@ -248,9 +309,15 @@ O gerenciamento do tema claro/escuro foi implementado com Context API, evitando 
 
 Um componente de ErrorBoundary foi implementado para capturar erros em tempo de execução nos componentes React, exibindo uma tela amigável ao usuário em vez de uma tela em branco, o que melhora a experiência e a robustez da aplicação.
 
+### Vitest + Testing Library
+
+O Vitest foi escolhido por possuir integração nativa com o ecossistema Vite, permitindo executar testes de forma rápida e com configuração simples.
+
+A Testing Library foi utilizada para testar a aplicação a partir da perspectiva do usuário, validando elementos visíveis na tela, interações e comportamentos importantes, como conversão, favoritos, histórico, validações e tratamento de erro da API.
+
 ### CI/CD com GitHub Actions
 
-A pipeline de integração contínua automatiza a instalação de dependências, verificação de tipagem com TypeScript e build de produção a cada novo push na branch `main`, garantindo que o repositório sempre esteja em um estado válido e pronto para deploy.
+A pipeline de integração contínua automatiza a instalação de dependências, verificação de lint, verificação de tipagem com TypeScript, execução dos testes automatizados e build de produção a cada novo push na branch `main`, garantindo que o repositório sempre esteja em um estado válido e pronto para deploy.
 
 ### Deploy automatizado na Vercel
 
@@ -259,6 +326,10 @@ O deploy na Vercel foi configurado para ser acionado automaticamente a cada atua
 ---
 
 ## 🧾 Releases
+
+### v2.2.0 — Testes automatizados e melhorias de confiabilidade
+
+Versão focada na implementação da primeira camada de testes automatizados do projeto, com Vitest, Testing Library, ambiente `jsdom`, testes para renderização, conversão, favoritos, histórico, validações e tratamento de erro da API, além da atualização do workflow para executar testes no GitHub Actions.
 
 ### v2.1.0 — Limpeza estrutural e melhorias de manutenção
 
@@ -280,6 +351,9 @@ Lançamento inicial com as funcionalidades principais: conversão em tempo real,
 
 ## 📈 Melhorias Futuras
 
+- Ampliar a cobertura de testes automatizados;
+- Adicionar testes para componentes reutilizáveis;
+- Adicionar relatório de cobertura no GitHub Actions;
 - Gráficos de variação cambial com histórico por período;
 - Alertas de preço para pares de moedas monitorados;
 - Detecção automática de localização para seleção padrão de moeda;
