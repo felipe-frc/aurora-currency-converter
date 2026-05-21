@@ -116,4 +116,28 @@ describe("Home", () => {
     expect(screen.queryByText(/Taxa de câmbio:/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Histórico/i)).not.toBeInTheDocument();
   });
+
+  it("não deve exibir resultado nem histórico quando a API retornar erro", async () => {
+    const user = userEvent.setup();
+
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 500,
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<Home />);
+
+    await user.click(screen.getByRole("button", { name: /converter/i }));
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://api.exchangerate-api.com/v4/latest/BRL"
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(/Taxa de câmbio:/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Histórico/i)).not.toBeInTheDocument();
+    });
+  });
 });
