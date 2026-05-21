@@ -14,7 +14,8 @@ import { ArrowRightLeft, Star, Trash2, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 
 const API_URL = "https://api.exchangerate-api.com/v4/latest/";
-const TWEMOJI_CDN = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg";
+const TWEMOJI_CDN =
+  "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg";
 
 const MAX_HISTORY_LENGTH = 50;
 const MAX_FAVORITES_LENGTH = 20;
@@ -350,8 +351,15 @@ export default function Home() {
       >
         <div className="space-y-6 overflow-visible">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-indigo-200">Valor</label>
+            <label
+              htmlFor="amount"
+              className="text-sm font-medium text-indigo-200"
+            >
+              Valor
+            </label>
+
             <Input
+              id="amount"
               type="number"
               value={amount}
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -367,10 +375,16 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-end overflow-visible">
             <div className="space-y-2 relative z-20">
-              <label className="text-sm font-medium text-indigo-200">De</label>
+              <label
+                id="from-currency-label"
+                className="text-sm font-medium text-indigo-200"
+              >
+                De
+              </label>
 
               <Select value={fromCurrency} onValueChange={setFromCurrency}>
                 <SelectTrigger
+                  aria-labelledby="from-currency-label"
                   className="w-full bg-white/10 border-cyan-500/30 text-white rounded-xl text-lg font-semibold"
                   style={INPUT_GLASS_STYLE}
                 >
@@ -419,10 +433,16 @@ export default function Home() {
             </Button>
 
             <div className="space-y-2 relative z-10">
-              <label className="text-sm font-medium text-indigo-200">Para</label>
+              <label
+                id="to-currency-label"
+                className="text-sm font-medium text-indigo-200"
+              >
+                Para
+              </label>
 
               <Select value={toCurrency} onValueChange={setToCurrency}>
                 <SelectTrigger
+                  aria-labelledby="to-currency-label"
                   className="w-full bg-white/10 border-cyan-500/30 text-white rounded-xl text-lg font-semibold"
                   style={INPUT_GLASS_STYLE}
                 >
