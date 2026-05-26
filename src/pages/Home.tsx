@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
 import { CURRENCIES, getCurrency, getCurrencyLabel } from "@/data/currencies";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { fetchExchangeRate } from "@/services/exchangeService";
 import type { ConversionResult, Favorite } from "@/types/currency";
 import { Button } from "@/components/ui/button";
@@ -69,31 +70,6 @@ const validateFavoritesData = (data: unknown): data is Favorite[] => {
   );
 };
 
-const loadFromLocalStorage = <T,>(
-  key: string,
-  validator: (data: unknown) => data is T,
-  defaultValue: T
-): T => {
-  try {
-    const item = localStorage.getItem(key);
-    if (!item) return defaultValue;
-
-    const parsed = JSON.parse(item);
-
-    if (validator(parsed)) {
-      return parsed;
-    }
-
-    console.warn(
-      `Dados inválidos encontrados no localStorage para a chave: ${key}`
-    );
-    return defaultValue;
-  } catch (error) {
-    console.error(`Erro ao carregar dados do localStorage (${key}):`, error);
-    return defaultValue;
-  }
-};
-
 const formatTimestamp = (timestamp: string) => {
   const date = new Date(timestamp);
 
@@ -136,39 +112,18 @@ export default function Home() {
   const [toCurrency, setToCurrency] = useState<string>("USD");
   const [result, setResult] = useState<ConversionResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState<ConversionResult[]>([]);
-  const [favorites, setFavorites] = useState<Favorite[]>([]);
 
-  useEffect(() => {
-    const savedHistory = loadFromLocalStorage(
-      STORAGE_KEYS.history,
-      validateConversionData,
-      []
-    );
+  const [history, setHistory] = useLocalStorage<ConversionResult[]>(
+    STORAGE_KEYS.history,
+    [],
+    validateConversionData
+  );
 
-    const savedFavorites = loadFromLocalStorage(
-      STORAGE_KEYS.favorites,
-      validateFavoritesData,
-      []
-    );
-
-    setHistory(savedHistory);
-    setFavorites(savedFavorites);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEYS.history,
-      JSON.stringify(history.slice(0, MAX_HISTORY_LENGTH))
-    );
-  }, [history]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEYS.favorites,
-      JSON.stringify(favorites.slice(0, MAX_FAVORITES_LENGTH))
-    );
-  }, [favorites]);
+  const [favorites, setFavorites] = useLocalStorage<Favorite[]>(
+    STORAGE_KEYS.favorites,
+    [],
+    validateFavoritesData
+  );
 
   const convertCurrency = useCallback(async () => {
     const numericAmount = Number(amount);
@@ -205,7 +160,7 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  }, [amount, fromCurrency, toCurrency]);
+  }, [amount, fromCurrency, setHistory, toCurrency]);
 
   const swapCurrencies = useCallback(() => {
     setFromCurrency(toCurrency);
@@ -233,28 +188,34 @@ export default function Home() {
       to: toCurrency,
     };
 
-    setFavorites((prev) => [...prev, newFavorite]);
-    toast.success("Adicionado aos favoritos!");
-  }, [favorites, fromCurrency, toCurrency]);
-
-  const removeFavorite = useCallback((from: string, to: string) => {
     setFavorites((prev) =>
-      prev.filter((favorite) => !(favorite.from === from && favorite.to === to))
+      [...prev, newFavorite].slice(0, MAX_FAVORITES_LENGTH)
     );
 
-    toast.success("Removido dos favoritos");
-  }, []);
+    toast.success("Adicionado aos favoritos!");
+  }, [favorites, fromCurrency, setFavorites, toCurrency]);
+
+  const removeFavorite = useCallback(
+    (from: string, to: string) => {
+      setFavorites((prev) =>
+        prev.filter((favorite) => !(favorite.from === from && favorite.to === to))
+      );
+
+      toast.success("Removido dos favoritos");
+    },
+    [setFavorites]
+  );
 
   const clearHistory = useCallback(() => {
     setHistory([]);
     setResult(null);
     toast.success("Histórico limpo");
-  }, []);
+  }, [setHistory]);
 
   const clearFavorites = useCallback(() => {
     setFavorites([]);
     toast.success("Favoritos limpos");
-  }, []);
+  }, [setFavorites]);
 
   const applyFavorite = useCallback((favorite: Favorite) => {
     setFromCurrency(favorite.from);
