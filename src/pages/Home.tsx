@@ -1,9 +1,6 @@
 import { useCallback, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
-import { CURRENCIES, getCurrency, getCurrencyLabel } from "@/data/currencies";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { fetchExchangeRate } from "@/services/exchangeService";
-import type { ConversionResult, Favorite } from "@/types/currency";
+import { FlagImage } from "@/components/currency/FlagImage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,11 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CURRENCIES, getCurrencyLabel } from "@/data/currencies";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { fetchExchangeRate } from "@/services/exchangeService";
+import type { ConversionResult, Favorite } from "@/types/currency";
 import { ArrowRightLeft, Star, Trash2, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
-
-const TWEMOJI_CDN =
-  "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg";
 
 const MAX_HISTORY_LENGTH = 50;
 const MAX_FAVORITES_LENGTH = 20;
@@ -82,29 +80,6 @@ const formatTimestamp = (timestamp: string) => {
     timeStyle: "medium",
   }).format(date);
 };
-
-type FlagImageProps = {
-  code: string;
-  sizeClass?: string;
-};
-
-function FlagImage({ code, sizeClass = "w-8 h-8" }: FlagImageProps) {
-  const currency = getCurrency(code);
-
-  if (!currency) {
-    return null;
-  }
-
-  return (
-    <img
-      src={`${TWEMOJI_CDN}/${currency.emojiCode}.svg`}
-      alt={`Bandeira de ${currency.name}`}
-      className={`${sizeClass} rounded-md object-cover drop-shadow-lg`}
-      loading="lazy"
-      style={{ imageRendering: "crisp-edges" }}
-    />
-  );
-}
 
 export default function Home() {
   const [amount, setAmount] = useState<string>("100");
