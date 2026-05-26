@@ -2,6 +2,7 @@ import { FlagImage } from "@/components/currency/FlagImage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { ConversionResult } from "@/types/currency";
+import { formatCurrency, formatExchangeRate } from "@/utils/formatCurrency";
 import { Trash2 } from "lucide-react";
 import type { CSSProperties } from "react";
 
@@ -67,14 +68,14 @@ export function HistoryList({
               <div>
                 <p className="text-white font-semibold flex items-center gap-2 flex-wrap">
                   <FlagImage code={item.from} sizeClass="w-5 h-5" />
-                  {item.amount.toFixed(2)} {item.from}
+                  {formatCurrency(item.amount, item.from)}
                   <span className="text-cyan-400">→</span>
                   <FlagImage code={item.to} sizeClass="w-5 h-5" />
-                  {item.result.toFixed(2)} {item.to}
+                  {formatCurrency(item.result, item.to)}
                 </p>
 
                 <p className="text-xs text-indigo-300 mt-1">
-                  Taxa: 1 {item.from} = {item.rate.toFixed(4)} {item.to}
+                  Taxa: 1 {item.from} = {formatExchangeRate(item.rate)} {item.to}
                 </p>
               </div>
 
