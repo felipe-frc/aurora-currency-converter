@@ -1,5 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
+import { CURRENCIES, getCurrency, getCurrencyLabel } from "@/data/currencies";
+import type { ConversionResult, Favorite } from "@/types/currency";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -49,50 +51,8 @@ const INPUT_GLASS_STYLE = {
   borderColor: "rgba(0, 217, 255, 0.3)",
 } satisfies CSSProperties;
 
-type Currency = {
-  code: string;
-  name: string;
-  emoji: string;
-  emojiCode: string;
-};
-
-type ConversionResult = {
-  from: string;
-  to: string;
-  amount: number;
-  result: number;
-  rate: number;
-  timestamp: string;
-};
-
-type Favorite = {
-  from: string;
-  to: string;
-};
-
-const CURRENCIES: Currency[] = [
-  { code: "ARS", name: "Peso Argentino", emoji: "🇦🇷", emojiCode: "1f1e6-1f1f7" },
-  { code: "AUD", name: "Dólar Australiano", emoji: "🇦🇺", emojiCode: "1f1e6-1f1fa" },
-  { code: "BRL", name: "Real Brasileiro", emoji: "🇧🇷", emojiCode: "1f1e7-1f1f7" },
-  { code: "CAD", name: "Dólar Canadense", emoji: "🇨🇦", emojiCode: "1f1e8-1f1e6" },
-  { code: "CHF", name: "Franco Suíço", emoji: "🇨🇭", emojiCode: "1f1e8-1f1ed" },
-  { code: "CNY", name: "Yuan Chinês", emoji: "🇨🇳", emojiCode: "1f1e8-1f1f3" },
-  { code: "EUR", name: "Euro", emoji: "🇪🇺", emojiCode: "1f1ea-1f1fa" },
-  { code: "GBP", name: "Libra Esterlina", emoji: "🇬🇧", emojiCode: "1f1ec-1f1e7" },
-  { code: "JPY", name: "Iene Japonês", emoji: "🇯🇵", emojiCode: "1f1ef-1f1f5" },
-  { code: "USD", name: "Dólar Americano", emoji: "🇺🇸", emojiCode: "1f1fa-1f1f8" },
-];
-
 const isObject = (value: unknown): value is Record<string, unknown> => {
   return typeof value === "object" && value !== null;
-};
-
-const getCurrency = (code: string) => {
-  return CURRENCIES.find((currency) => currency.code === code);
-};
-
-const getCurrencyLabel = (code: string) => {
-  return getCurrency(code)?.name ?? code;
 };
 
 const validateConversionData = (data: unknown): data is ConversionResult[] => {
@@ -136,7 +96,9 @@ const loadFromLocalStorage = <T,>(
       return parsed;
     }
 
-    console.warn(`Dados inválidos encontrados no localStorage para a chave: ${key}`);
+    console.warn(
+      `Dados inválidos encontrados no localStorage para a chave: ${key}`
+    );
     return defaultValue;
   } catch (error) {
     console.error(`Erro ao carregar dados do localStorage (${key}):`, error);
@@ -243,7 +205,9 @@ export default function Home() {
         }
 
         if (response.status === 429) {
-          throw new Error("Muitas requisições. Tente novamente em alguns segundos");
+          throw new Error(
+            "Muitas requisições. Tente novamente em alguns segundos"
+          );
         }
 
         throw new Error(`Erro HTTP ${response.status}`);
