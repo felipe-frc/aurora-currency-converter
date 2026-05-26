@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
+import { CurrencyResult } from "@/components/currency/CurrencyResult";
 import { CurrencySelect } from "@/components/currency/CurrencySelect";
 import { FlagImage } from "@/components/currency/FlagImage";
 import { Button } from "@/components/ui/button";
@@ -117,7 +118,9 @@ export default function Home() {
       };
 
       setResult(conversionData);
-      setHistory((prev) => [conversionData, ...prev].slice(0, MAX_HISTORY_LENGTH));
+      setHistory((prev) =>
+        [conversionData, ...prev].slice(0, MAX_HISTORY_LENGTH)
+      );
 
       toast.success("Conversão realizada com sucesso!");
     } catch (error) {
@@ -167,7 +170,9 @@ export default function Home() {
   const removeFavorite = useCallback(
     (from: string, to: string) => {
       setFavorites((prev) =>
-        prev.filter((favorite) => !(favorite.from === from && favorite.to === to))
+        prev.filter(
+          (favorite) => !(favorite.from === from && favorite.to === to)
+        )
       );
 
       toast.success("Removido dos favoritos");
@@ -266,22 +271,7 @@ export default function Home() {
             />
           </div>
 
-          {result && (
-            <div className="mt-6 text-center animate-fade-in bg-cyan-500/10 border border-cyan-400/30 rounded-2xl p-6">
-              <p className="text-lg text-indigo-200">
-                {result.amount.toFixed(2)} {getCurrencyLabel(result.from)} é igual a
-              </p>
-
-              <p className="text-4xl font-bold text-white my-2">
-                {result.result.toFixed(2)} {getCurrencyLabel(result.to)}
-              </p>
-
-              <p className="text-sm text-indigo-300">
-                Taxa de câmbio: 1 {result.from} = {result.rate.toFixed(4)}{" "}
-                {result.to}
-              </p>
-            </div>
-          )}
+          {result && <CurrencyResult result={result} />}
 
           <Button
             type="button"
