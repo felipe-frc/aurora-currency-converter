@@ -8,16 +8,16 @@ type CurrencyResultProps = {
 
 export function CurrencyResult({ result }: CurrencyResultProps) {
   return (
-    <div className="mt-6 text-center animate-fade-in bg-cyan-500/10 border border-cyan-400/30 rounded-2xl p-6">
-      <p className="text-lg text-indigo-200">
+    <div className="mt-6 animate-fade-in rounded-2xl border border-sky-300/70 bg-white/75 p-6 text-center shadow-sm dark:border-cyan-400/30 dark:bg-cyan-500/10">
+      <p className="text-lg font-medium text-slate-700 dark:text-indigo-200">
         {formatCurrency(result.amount, result.from)} é igual a
       </p>
 
-      <p className="text-4xl font-bold text-white my-2">
+      <p className="my-2 text-4xl font-bold text-slate-900 dark:text-white">
         {formatCurrency(result.result, result.to)}
       </p>
 
-      <p className="text-sm text-indigo-300">
+      <p className="text-sm font-medium text-sky-700 dark:text-indigo-300">
         Taxa de câmbio: 1 {getCurrencyLabel(result.from)} ={" "}
         {formatExchangeRate(result.rate)} {result.to}
       </p>

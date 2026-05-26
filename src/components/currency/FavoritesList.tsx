@@ -29,11 +29,11 @@ export function FavoritesList({
 
   return (
     <Card
-      className="w-full max-w-2xl p-6 mb-8 animate-fade-in rounded-3xl"
+      className="w-full max-w-2xl rounded-3xl p-6 mb-8 animate-fade-in"
       style={cardStyle}
     >
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-cyan-400">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-sky-700 dark:text-cyan-400">
           Favoritos ({favorites.length}/{maxFavoritesLength})
         </h2>
 
@@ -42,7 +42,7 @@ export function FavoritesList({
           onClick={onClearFavorites}
           variant="ghost"
           size="sm"
-          className="text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200"
+          className="text-red-500 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
           aria-label="Limpar favoritos"
         >
           <Trash2 className="h-4 w-4" />
@@ -53,7 +53,7 @@ export function FavoritesList({
         {favorites.map((favorite) => (
           <div
             key={`${favorite.from}-${favorite.to}`}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400 rounded-full text-sm text-cyan-300 transition-all duration-200 group"
+            className="group flex items-center gap-2 rounded-full border border-sky-300/70 bg-white/80 px-4 py-2 text-sm text-sky-700 shadow-sm transition-all duration-200 hover:border-sky-500 hover:bg-sky-50 dark:border-cyan-500/30 dark:bg-white/10 dark:text-cyan-300 dark:hover:border-cyan-400 dark:hover:bg-cyan-500/20"
           >
             <button
               type="button"
@@ -62,10 +62,14 @@ export function FavoritesList({
               title={`Usar ${favorite.from} para ${favorite.to}`}
             >
               <FlagImage code={favorite.from} sizeClass="w-5 h-5" />
-              <span className="text-xs font-semibold">{favorite.from}</span>
-              <span>→</span>
+              <span className="text-xs font-semibold text-slate-800 dark:text-white">
+                {favorite.from}
+              </span>
+              <span className="text-sky-600 dark:text-cyan-300">→</span>
               <FlagImage code={favorite.to} sizeClass="w-5 h-5" />
-              <span className="text-xs font-semibold">{favorite.to}</span>
+              <span className="text-xs font-semibold text-slate-800 dark:text-white">
+                {favorite.to}
+              </span>
               <span className="sr-only">
                 {getCurrencyLabel(favorite.from)} para{" "}
                 {getCurrencyLabel(favorite.to)}
@@ -75,7 +79,7 @@ export function FavoritesList({
             <button
               type="button"
               onClick={() => onRemoveFavorite(favorite.from, favorite.to)}
-              className="ml-1 opacity-0 group-hover:opacity-100 focus:opacity-100 focus-visible:opacity-100 transition-opacity text-red-300 hover:text-red-200"
+              className="ml-1 text-red-500 opacity-0 transition-opacity hover:text-red-600 focus:opacity-100 focus-visible:opacity-100 dark:text-red-300 dark:hover:text-red-200 group-hover:opacity-100"
               title="Remover favorito"
               aria-label={`Remover favorito ${favorite.from} para ${favorite.to}`}
             >

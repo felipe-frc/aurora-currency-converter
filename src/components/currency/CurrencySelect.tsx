@@ -30,20 +30,25 @@ export function CurrencySelect({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <label id={labelId} className="text-sm font-medium text-indigo-200">
+      <label
+        id={labelId}
+        className="text-sm font-semibold text-slate-700 dark:text-indigo-200"
+      >
         {label}
       </label>
 
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger
           aria-labelledby={labelId}
-          className="w-full bg-white/10 border-cyan-500/30 text-white rounded-xl text-lg font-semibold"
+          className="w-full rounded-xl border border-sky-400/50 bg-white/85 text-slate-900 shadow-sm transition-all duration-200 hover:border-sky-500 focus:border-sky-500 dark:border-cyan-500/30 dark:bg-white/10 dark:text-white dark:hover:border-cyan-400"
           style={triggerStyle}
         >
           <SelectValue>
             <span className="flex items-center gap-3">
               <FlagImage code={value} sizeClass="w-7 h-7" />
-              <span className="text-sm font-medium">{value}</span>
+              <span className="text-sm font-semibold text-slate-800 dark:text-white">
+                {value}
+              </span>
             </span>
           </SelectValue>
         </SelectTrigger>
@@ -52,18 +57,18 @@ export function CurrencySelect({
           position="popper"
           sideOffset={8}
           align="start"
-          className="z-[9999] w-[min(360px,calc(100vw-2rem))] max-h-72 overflow-y-auto rounded-2xl border border-cyan-500/30 bg-slate-950/95 text-white backdrop-blur-xl"
+          className="z-[9999] max-h-72 w-[min(360px,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-sky-300/70 bg-white/95 text-slate-900 shadow-xl backdrop-blur-xl dark:border-cyan-500/30 dark:bg-slate-950/95 dark:text-white"
         >
           {CURRENCIES.map((currency) => (
             <SelectItem
               key={currency.code}
               value={currency.code}
-              className="cursor-pointer rounded-lg py-3 focus:bg-cyan-500/15 focus:text-white"
+              className="cursor-pointer rounded-lg py-3 text-slate-800 transition-colors focus:bg-sky-100 focus:text-slate-900 dark:text-white dark:focus:bg-cyan-500/15 dark:focus:text-white"
             >
               <span className="flex items-center gap-3">
                 <FlagImage code={currency.code} sizeClass="w-6 h-6" />
                 <span className="font-semibold">{currency.code}</span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-slate-500 dark:text-gray-400">
                   ({currency.name})
                 </span>
               </span>

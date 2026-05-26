@@ -22,15 +22,16 @@ const STORAGE_KEYS = {
 } as const;
 
 const GLASS_CARD_STYLE = {
-  background: "rgba(255, 255, 255, 0.1)",
-  backdropFilter: "blur(10px)",
-  WebkitBackdropFilter: "blur(10px)",
-  border: "1px solid rgba(0, 217, 255, 0.2)",
+  background: "var(--glass-bg)",
+  backdropFilter: "blur(16px)",
+  WebkitBackdropFilter: "blur(16px)",
+  border: "1px solid var(--glass-border)",
+  boxShadow: "0 20px 60px rgba(15, 35, 63, 0.12)",
 } satisfies CSSProperties;
 
 const INPUT_GLASS_STYLE = {
-  background: "rgba(255, 255, 255, 0.08)",
-  borderColor: "rgba(0, 217, 255, 0.3)",
+  background: "var(--input)",
+  borderColor: "var(--border)",
 } satisfies CSSProperties;
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
@@ -185,29 +186,30 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center py-8 px-4 overflow-x-clip">
-      <div className="text-center mb-12 animate-fade-in">
-        <div className="flex items-center justify-center gap-3 mb-4">
+    <div className="flex min-h-screen flex-col items-center justify-center overflow-x-clip px-4 py-8">
+      <div className="mb-12 text-center animate-fade-in">
+        <div className="mb-4 flex items-center justify-center gap-3">
           <div className="text-4xl">💱</div>
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00D9FF] to-[#FF006E]">
+
+          <h1 className="bg-gradient-to-r from-sky-600 via-cyan-500 to-fuchsia-500 bg-clip-text text-5xl font-bold text-transparent dark:from-[#00D9FF] dark:to-[#FF006E]">
             Aurora
           </h1>
         </div>
 
-        <p className="text-lg text-indigo-200 font-light">
+        <p className="text-lg font-medium text-slate-700 dark:text-indigo-200">
           Conversor de Moedas Premium
         </p>
       </div>
 
       <Card
-        className="relative w-full max-w-2xl p-8 mb-8 animate-fade-in rounded-3xl overflow-visible"
+        className="relative mb-8 w-full max-w-2xl overflow-visible rounded-3xl p-8 animate-fade-in"
         style={GLASS_CARD_STYLE}
       >
         <div className="space-y-6 overflow-visible">
           <div className="space-y-2">
             <label
               htmlFor="amount"
-              className="text-sm font-medium text-indigo-200"
+              className="text-sm font-semibold text-slate-700 dark:text-indigo-200"
             >
               Valor
             </label>
@@ -222,12 +224,12 @@ export default function Home() {
               placeholder="100.00"
               step="0.01"
               min="0"
-              className="bg-white/10 border-cyan-500/30 text-white placeholder:text-white/50 text-lg font-semibold rounded-xl"
+              className="rounded-xl border border-sky-400/50 bg-white/85 text-lg font-semibold text-slate-900 shadow-sm placeholder:text-slate-400 transition-all duration-200 focus:border-sky-500 dark:border-cyan-500/30 dark:bg-white/10 dark:text-white dark:placeholder:text-white/50"
               style={INPUT_GLASS_STYLE}
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-end overflow-visible">
+          <div className="grid grid-cols-1 items-end gap-4 overflow-visible md:grid-cols-[1fr_auto_1fr]">
             <CurrencySelect
               id="from-currency"
               label="De"
@@ -242,7 +244,7 @@ export default function Home() {
               onClick={swapCurrencies}
               variant="ghost"
               size="icon"
-              className="bg-white/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white rounded-full transition-all duration-200 mx-auto"
+              className="mx-auto rounded-full border border-sky-400/60 bg-white/80 text-sky-700 shadow-sm transition-all duration-200 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-800 dark:border-cyan-500/30 dark:bg-white/10 dark:text-cyan-300 dark:hover:border-cyan-400 dark:hover:bg-cyan-500/20 dark:hover:text-white"
               aria-label="Inverter moedas"
             >
               <ArrowRightLeft className="h-5 w-5" />
@@ -264,16 +266,16 @@ export default function Home() {
             type="button"
             onClick={convertCurrency}
             disabled={loading}
-            className="w-full bg-gradient-to-r from-[#00D9FF] to-[#FF006E] text-white font-bold py-3 rounded-xl text-lg hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-xl bg-gradient-to-r from-sky-500 via-cyan-500 to-fuchsia-500 py-3 text-lg font-bold text-white shadow-lg shadow-sky-500/20 transition-all duration-300 hover:scale-[1.01] hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50 dark:from-[#00D9FF] dark:to-[#FF006E]"
           >
             {loading ? (
               <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white" />
                 <span className="ml-2">Convertendo...</span>
               </div>
             ) : (
               <div className="flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 mr-2" />
+                <TrendingUp className="mr-2 h-5 w-5" />
                 Converter
               </div>
             )}
@@ -283,9 +285,9 @@ export default function Home() {
             type="button"
             onClick={addToFavorites}
             variant="outline"
-            className="w-full bg-transparent border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 hover:text-white rounded-xl transition-all duration-200"
+            className="w-full rounded-xl border border-sky-400/60 bg-white/70 text-sky-700 shadow-sm transition-all duration-200 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-800 dark:border-cyan-500/30 dark:bg-transparent dark:text-cyan-300 dark:hover:bg-cyan-500/20 dark:hover:text-white"
           >
-            <Star className="h-4 w-4 mr-2" />
+            <Star className="mr-2 h-4 w-4" />
             Salvar par como favorito
           </Button>
         </div>
@@ -307,9 +309,9 @@ export default function Home() {
         onClearHistory={clearHistory}
       />
 
-      <div className="mt-12 text-center text-indigo-300 text-sm">
+      <div className="mt-12 text-center text-sm font-medium text-slate-600 dark:text-indigo-300">
         <p>💡 Taxas de câmbio atualizadas em tempo real</p>
-        <p className="text-xs text-indigo-400 mt-2">
+        <p className="mt-2 text-xs text-slate-500 dark:text-indigo-400">
           © 2026 Aurora Currency Converter
         </p>
       </div>
