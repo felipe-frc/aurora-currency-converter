@@ -1,9 +1,10 @@
-import { Sonner } from "@/components/ui/sonner";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Sonner } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Home from "@/pages/Home";
+import NotFound from "@/pages/NotFound";
+import { Route, Switch } from "wouter";
 
 function Router() {
   return (
@@ -19,7 +20,8 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
-       <Sonner />
+        <Sonner />
+        <ThemeToggle />
         <Router />
       </ThemeProvider>
     </ErrorBoundary>
