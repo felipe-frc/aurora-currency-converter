@@ -1,17 +1,11 @@
 import { useCallback, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
+import { CurrencySelect } from "@/components/currency/CurrencySelect";
 import { FlagImage } from "@/components/currency/FlagImage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { CURRENCIES, getCurrencyLabel } from "@/data/currencies";
+import { getCurrencyLabel } from "@/data/currencies";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { fetchExchangeRate } from "@/services/exchangeService";
 import type { ConversionResult, Favorite } from "@/types/currency";
@@ -242,52 +236,14 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-end overflow-visible">
-            <div className="space-y-2 relative z-20">
-              <label
-                id="from-currency-label"
-                className="text-sm font-medium text-indigo-200"
-              >
-                De
-              </label>
-
-              <Select value={fromCurrency} onValueChange={setFromCurrency}>
-                <SelectTrigger
-                  aria-labelledby="from-currency-label"
-                  className="w-full bg-white/10 border-cyan-500/30 text-white rounded-xl text-lg font-semibold"
-                  style={INPUT_GLASS_STYLE}
-                >
-                  <SelectValue>
-                    <span className="flex items-center gap-3">
-                      <FlagImage code={fromCurrency} sizeClass="w-7 h-7" />
-                      <span className="text-sm font-medium">{fromCurrency}</span>
-                    </span>
-                  </SelectValue>
-                </SelectTrigger>
-
-                <SelectContent
-                  position="popper"
-                  sideOffset={8}
-                  align="start"
-                  className="z-[9999] w-[min(360px,calc(100vw-2rem))] max-h-72 overflow-y-auto rounded-2xl border border-cyan-500/30 bg-slate-950/95 text-white backdrop-blur-xl"
-                >
-                  {CURRENCIES.map((currency) => (
-                    <SelectItem
-                      key={currency.code}
-                      value={currency.code}
-                      className="cursor-pointer rounded-lg py-3 focus:bg-cyan-500/15 focus:text-white"
-                    >
-                      <span className="flex items-center gap-3">
-                        <FlagImage code={currency.code} sizeClass="w-6 h-6" />
-                        <span className="font-semibold">{currency.code}</span>
-                        <span className="text-xs text-gray-400">
-                          ({currency.name})
-                        </span>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <CurrencySelect
+              id="from-currency"
+              label="De"
+              value={fromCurrency}
+              onValueChange={setFromCurrency}
+              className="relative z-20"
+              triggerStyle={INPUT_GLASS_STYLE}
+            />
 
             <Button
               type="button"
@@ -300,52 +256,14 @@ export default function Home() {
               <ArrowRightLeft className="h-5 w-5" />
             </Button>
 
-            <div className="space-y-2 relative z-10">
-              <label
-                id="to-currency-label"
-                className="text-sm font-medium text-indigo-200"
-              >
-                Para
-              </label>
-
-              <Select value={toCurrency} onValueChange={setToCurrency}>
-                <SelectTrigger
-                  aria-labelledby="to-currency-label"
-                  className="w-full bg-white/10 border-cyan-500/30 text-white rounded-xl text-lg font-semibold"
-                  style={INPUT_GLASS_STYLE}
-                >
-                  <SelectValue>
-                    <span className="flex items-center gap-3">
-                      <FlagImage code={toCurrency} sizeClass="w-7 h-7" />
-                      <span className="text-sm font-medium">{toCurrency}</span>
-                    </span>
-                  </SelectValue>
-                </SelectTrigger>
-
-                <SelectContent
-                  position="popper"
-                  sideOffset={8}
-                  align="start"
-                  className="z-[9999] w-[min(360px,calc(100vw-2rem))] max-h-72 overflow-y-auto rounded-2xl border border-cyan-500/30 bg-slate-950/95 text-white backdrop-blur-xl"
-                >
-                  {CURRENCIES.map((currency) => (
-                    <SelectItem
-                      key={currency.code}
-                      value={currency.code}
-                      className="cursor-pointer rounded-lg py-3 focus:bg-cyan-500/15 focus:text-white"
-                    >
-                      <span className="flex items-center gap-3">
-                        <FlagImage code={currency.code} sizeClass="w-6 h-6" />
-                        <span className="font-semibold">{currency.code}</span>
-                        <span className="text-xs text-gray-400">
-                          ({currency.name})
-                        </span>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <CurrencySelect
+              id="to-currency"
+              label="Para"
+              value={toCurrency}
+              onValueChange={setToCurrency}
+              className="relative z-10"
+              triggerStyle={INPUT_GLASS_STYLE}
+            />
           </div>
 
           {result && (
