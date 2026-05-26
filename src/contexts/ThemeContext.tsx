@@ -1,28 +1,15 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-
-type Theme = "dark" | "light";
-
-type ThemeContextValue = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  toggleTheme: () => void;
-};
+import {
+  THEME_STORAGE_KEY,
+  ThemeContext,
+} from "@/contexts/theme";
+import type { Theme } from "@/contexts/theme";
 
 type ThemeProviderProps = {
   children: ReactNode;
   defaultTheme?: Theme;
 };
-
-const THEME_STORAGE_KEY = "aurora_theme";
-
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const getStoredTheme = (defaultTheme: Theme): Theme => {
   try {
@@ -38,7 +25,10 @@ const getStoredTheme = (defaultTheme: Theme): Theme => {
   }
 };
 
-function ThemeProvider({ children, defaultTheme = "dark" }: ThemeProviderProps) {
+export function ThemeProvider({
+  children,
+  defaultTheme = "dark",
+}: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() =>
     getStoredTheme(defaultTheme)
   );
@@ -79,16 +69,3 @@ function ThemeProvider({ children, defaultTheme = "dark" }: ThemeProviderProps) 
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
-
-function useTheme() {
-  const context = useContext(ThemeContext);
-
-  if (!context) {
-    throw new Error("useTheme deve ser usado dentro de ThemeProvider");
-  }
-
-  return context;
-}
-
-export { ThemeProvider, useTheme };
-export type { Theme };
