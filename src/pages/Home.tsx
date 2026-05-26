@@ -2,11 +2,11 @@ import { useCallback, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
 import { CurrencyResult } from "@/components/currency/CurrencyResult";
 import { CurrencySelect } from "@/components/currency/CurrencySelect";
+import { FavoritesList } from "@/components/currency/FavoritesList";
 import { FlagImage } from "@/components/currency/FlagImage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { getCurrencyLabel } from "@/data/currencies";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { fetchExchangeRate } from "@/services/exchangeService";
 import type { ConversionResult, Favorite } from "@/types/currency";
@@ -304,65 +304,14 @@ export default function Home() {
         </div>
       </Card>
 
-      {favorites.length > 0 && (
-        <Card
-          className="w-full max-w-2xl p-6 mb-8 animate-fade-in rounded-3xl"
-          style={GLASS_CARD_STYLE}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-cyan-400">
-              Favoritos ({favorites.length}/{MAX_FAVORITES_LENGTH})
-            </h2>
-
-            <Button
-              type="button"
-              onClick={clearFavorites}
-              variant="ghost"
-              size="sm"
-              className="text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200"
-              aria-label="Limpar favoritos"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {favorites.map((favorite) => (
-              <div
-                key={`${favorite.from}-${favorite.to}`}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400 rounded-full text-sm text-cyan-300 transition-all duration-200 group"
-              >
-                <button
-                  type="button"
-                  onClick={() => applyFavorite(favorite)}
-                  className="flex items-center gap-2"
-                  title={`Usar ${favorite.from} para ${favorite.to}`}
-                >
-                  <FlagImage code={favorite.from} sizeClass="w-5 h-5" />
-                  <span className="text-xs font-semibold">{favorite.from}</span>
-                  <span>→</span>
-                  <FlagImage code={favorite.to} sizeClass="w-5 h-5" />
-                  <span className="text-xs font-semibold">{favorite.to}</span>
-                  <span className="sr-only">
-                    {getCurrencyLabel(favorite.from)} para{" "}
-                    {getCurrencyLabel(favorite.to)}
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => removeFavorite(favorite.from, favorite.to)}
-                  className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity text-red-300 hover:text-red-200"
-                  title="Remover favorito"
-                  aria-label={`Remover favorito ${favorite.from} para ${favorite.to}`}
-                >
-                  <Trash2 className="h-3 w-3" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </Card>
-      )}
+      <FavoritesList
+        favorites={favorites}
+        maxFavoritesLength={MAX_FAVORITES_LENGTH}
+        cardStyle={GLASS_CARD_STYLE}
+        onApplyFavorite={applyFavorite}
+        onRemoveFavorite={removeFavorite}
+        onClearFavorites={clearFavorites}
+      />
 
       {history.length > 0 && (
         <Card
