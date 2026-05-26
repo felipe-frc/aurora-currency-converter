@@ -1,6 +1,6 @@
 {
   "name": "aurora-currency-converter",
-  "version": "1.0.0",
+  "version": "2.2.0",
   "description": "Um conversor de moedas sofisticado com design glassmorphism, construído com React 19 e Tailwind CSS 4",
   "author": "Marcos Felipe França",
   "license": "MIT",
