@@ -1,6 +1,6 @@
 {
   "name": "aurora-currency-converter",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Um conversor de moedas sofisticado com design glassmorphism, construído com React 19 e Tailwind CSS 4",
   "author": "Marcos Felipe França",
   "license": "MIT",
@@ -24,17 +24,17 @@
     "glassmorphism",
     "vite"
   ],
-"scripts": {
-  "dev": "vite",
-  "build": "tsc -b && vite build",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix",
-  "preview": "vite preview",
-  "type-check": "tsc --noEmit",
-  "test": "vitest",
-  "test:run": "vitest run",
-  "test:coverage": "vitest run --coverage"
-},
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
