@@ -7,6 +7,7 @@ import { HistoryList } from "@/components/currency/HistoryList";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/contexts/useLanguage";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { fetchExchangeRate } from "@/services/exchangeService";
 import type { ConversionResult, Favorite } from "@/types/currency";
@@ -65,6 +66,8 @@ const validateFavoritesData = (data: unknown): data is Favorite[] => {
 };
 
 export default function Home() {
+  const { t } = useLanguage();
+
   const [amount, setAmount] = useState<string>("100");
   const [fromCurrency, setFromCurrency] = useState<string>("BRL");
   const [toCurrency, setToCurrency] = useState<string>("USD");
@@ -87,7 +90,7 @@ export default function Home() {
     const numericAmount = Number(amount);
 
     if (Number.isNaN(numericAmount) || numericAmount <= 0) {
-      toast.error("Por favor, insira um valor numérico válido");
+      toast.error(t("invalidAmount"));
       return;
     }
 
@@ -110,17 +113,17 @@ export default function Home() {
         [conversionData, ...prev].slice(0, MAX_HISTORY_LENGTH)
       );
 
-      toast.success("Conversão realizada com sucesso!");
+      toast.success(t("conversionSuccess"));
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Erro desconhecido";
+        error instanceof Error ? error.message : t("unknownError");
 
-      toast.error(`Erro: ${errorMessage}`);
+      toast.error(`${t("errorPrefix")}: ${errorMessage}`);
       console.error("Erro na conversão:", error);
     } finally {
       setLoading(false);
     }
-  }, [amount, fromCurrency, setHistory, toCurrency]);
+  }, [amount, fromCurrency, setHistory, t, toCurrency]);
 
   const swapCurrencies = useCallback(() => {
     setFromCurrency(toCurrency);
@@ -130,7 +133,7 @@ export default function Home() {
 
   const addToFavorites = useCallback(() => {
     if (favorites.length >= MAX_FAVORITES_LENGTH) {
-      toast.error(`Máximo de ${MAX_FAVORITES_LENGTH} favoritos atingido`);
+      toast.error(`${t("favoriteLimit")}: ${MAX_FAVORITES_LENGTH}`);
       return;
     }
 
@@ -139,7 +142,7 @@ export default function Home() {
     );
 
     if (favoriteExists) {
-      toast.info("Este par já está nos favoritos");
+      toast.info(t("favoriteAlreadyExists"));
       return;
     }
 
@@ -152,8 +155,8 @@ export default function Home() {
       [...prev, newFavorite].slice(0, MAX_FAVORITES_LENGTH)
     );
 
-    toast.success("Adicionado aos favoritos!");
-  }, [favorites, fromCurrency, setFavorites, toCurrency]);
+    toast.success(t("favoriteAdded"));
+  }, [favorites, fromCurrency, setFavorites, t, toCurrency]);
 
   const removeFavorite = useCallback(
     (from: string, to: string) => {
@@ -163,21 +166,21 @@ export default function Home() {
         )
       );
 
-      toast.success("Removido dos favoritos");
+      toast.success(t("favoriteRemoved"));
     },
-    [setFavorites]
+    [setFavorites, t]
   );
 
   const clearHistory = useCallback(() => {
     setHistory([]);
     setResult(null);
-    toast.success("Histórico limpo");
-  }, [setHistory]);
+    toast.success(t("historyCleared"));
+  }, [setHistory, t]);
 
   const clearFavorites = useCallback(() => {
     setFavorites([]);
-    toast.success("Favoritos limpos");
-  }, [setFavorites]);
+    toast.success(t("favoritesCleared"));
+  }, [setFavorites, t]);
 
   const applyFavorite = useCallback((favorite: Favorite) => {
     setFromCurrency(favorite.from);
@@ -197,7 +200,7 @@ export default function Home() {
         </div>
 
         <p className="text-lg font-medium text-slate-700 dark:text-indigo-200">
-          Conversor de Moedas Premium
+          {t("appSubtitle")}
         </p>
       </div>
 
@@ -211,7 +214,7 @@ export default function Home() {
               htmlFor="amount"
               className="text-sm font-semibold text-slate-700 dark:text-indigo-200"
             >
-              Valor
+              {t("amount")}
             </label>
 
             <Input
@@ -232,7 +235,7 @@ export default function Home() {
           <div className="grid grid-cols-1 items-end gap-4 overflow-visible md:grid-cols-[1fr_auto_1fr]">
             <CurrencySelect
               id="from-currency"
-              label="De"
+              label={t("from")}
               value={fromCurrency}
               onValueChange={setFromCurrency}
               className="relative z-20"
@@ -245,14 +248,14 @@ export default function Home() {
               variant="ghost"
               size="icon"
               className="mx-auto rounded-full border border-sky-400/60 bg-white/80 text-sky-700 shadow-sm transition-all duration-200 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-800 dark:border-cyan-500/30 dark:bg-white/10 dark:text-cyan-300 dark:hover:border-cyan-400 dark:hover:bg-cyan-500/20 dark:hover:text-white"
-              aria-label="Inverter moedas"
+              aria-label={t("swapCurrencies")}
             >
               <ArrowRightLeft className="h-5 w-5" />
             </Button>
 
             <CurrencySelect
               id="to-currency"
-              label="Para"
+              label={t("to")}
               value={toCurrency}
               onValueChange={setToCurrency}
               className="relative z-10"
@@ -271,12 +274,12 @@ export default function Home() {
             {loading ? (
               <div className="flex items-center justify-center">
                 <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white" />
-                <span className="ml-2">Convertendo...</span>
+                <span className="ml-2">{t("converting")}</span>
               </div>
             ) : (
               <div className="flex items-center justify-center">
                 <TrendingUp className="mr-2 h-5 w-5" />
-                Converter
+                {t("convert")}
               </div>
             )}
           </Button>
@@ -288,7 +291,7 @@ export default function Home() {
             className="w-full rounded-xl border border-sky-400/60 bg-white/70 text-sky-700 shadow-sm transition-all duration-200 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-800 dark:border-cyan-500/30 dark:bg-transparent dark:text-cyan-300 dark:hover:bg-cyan-500/20 dark:hover:text-white"
           >
             <Star className="mr-2 h-4 w-4" />
-            Salvar par como favorito
+            {t("saveFavorite")}
           </Button>
         </div>
       </Card>
@@ -310,7 +313,7 @@ export default function Home() {
       />
 
       <div className="mt-12 text-center text-sm font-medium text-slate-600 dark:text-indigo-300">
-        <p>💡 Taxas de câmbio atualizadas em tempo real</p>
+        <p>{t("exchangeRatesUpdated")}</p>
         <p className="mt-2 text-xs text-slate-500 dark:text-indigo-400">
           © 2026 Aurora Currency Converter
         </p>

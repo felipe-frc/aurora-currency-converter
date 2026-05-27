@@ -1,6 +1,7 @@
 import { FlagImage } from "@/components/currency/FlagImage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/useLanguage";
 import { getCurrencyLabel } from "@/data/currencies";
 import type { Favorite } from "@/types/currency";
 import { Trash2 } from "lucide-react";
@@ -23,18 +24,20 @@ export function FavoritesList({
   onRemoveFavorite,
   onClearFavorites,
 }: FavoritesListProps) {
+  const { t } = useLanguage();
+
   if (favorites.length === 0) {
     return null;
   }
 
   return (
     <Card
-      className="w-full max-w-2xl rounded-3xl p-6 mb-8 animate-fade-in"
+      className="mb-8 w-full max-w-2xl rounded-3xl p-6 animate-fade-in"
       style={cardStyle}
     >
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-sky-700 dark:text-cyan-400">
-          Favoritos ({favorites.length}/{maxFavoritesLength})
+          {t("favorites")} ({favorites.length}/{maxFavoritesLength})
         </h2>
 
         <Button
@@ -43,7 +46,7 @@ export function FavoritesList({
           variant="ghost"
           size="sm"
           className="text-red-500 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
-          aria-label="Limpar favoritos"
+          aria-label={t("clearFavorites")}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -59,7 +62,7 @@ export function FavoritesList({
               type="button"
               onClick={() => onApplyFavorite(favorite)}
               className="flex items-center gap-2"
-              title={`Usar ${favorite.from} para ${favorite.to}`}
+              title={`${t("useFavorite")} ${favorite.from} ${t("to")} ${favorite.to}`}
             >
               <FlagImage code={favorite.from} sizeClass="w-5 h-5" />
               <span className="text-xs font-semibold text-slate-800 dark:text-white">
@@ -71,7 +74,7 @@ export function FavoritesList({
                 {favorite.to}
               </span>
               <span className="sr-only">
-                {getCurrencyLabel(favorite.from)} para{" "}
+                {getCurrencyLabel(favorite.from)} {t("to")}{" "}
                 {getCurrencyLabel(favorite.to)}
               </span>
             </button>
@@ -80,8 +83,8 @@ export function FavoritesList({
               type="button"
               onClick={() => onRemoveFavorite(favorite.from, favorite.to)}
               className="ml-1 text-red-500 opacity-0 transition-opacity hover:text-red-600 focus:opacity-100 focus-visible:opacity-100 dark:text-red-300 dark:hover:text-red-200 group-hover:opacity-100"
-              title="Remover favorito"
-              aria-label={`Remover favorito ${favorite.from} para ${favorite.to}`}
+              title={t("removeFavorite")}
+              aria-label={`${t("removeFavorite")} ${favorite.from} ${t("to")} ${favorite.to}`}
             >
               <Trash2 className="h-3 w-3" />
             </button>

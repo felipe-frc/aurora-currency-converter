@@ -1,6 +1,7 @@
 import { FlagImage } from "@/components/currency/FlagImage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/useLanguage";
 import type { ConversionResult } from "@/types/currency";
 import { formatCurrency, formatExchangeRate } from "@/utils/formatCurrency";
 import { Trash2 } from "lucide-react";
@@ -13,14 +14,14 @@ type HistoryListProps = {
   onClearHistory: () => void;
 };
 
-const formatTimestamp = (timestamp: string) => {
+const formatTimestamp = (timestamp: string, locale: string) => {
   const date = new Date(timestamp);
 
   if (Number.isNaN(date.getTime())) {
     return timestamp;
   }
 
-  return new Intl.DateTimeFormat("pt-BR", {
+  return new Intl.DateTimeFormat(locale, {
     dateStyle: "short",
     timeStyle: "medium",
   }).format(date);
@@ -32,6 +33,8 @@ export function HistoryList({
   cardStyle,
   onClearHistory,
 }: HistoryListProps) {
+  const { language, t } = useLanguage();
+
   if (history.length === 0) {
     return null;
   }
@@ -43,7 +46,7 @@ export function HistoryList({
     >
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-sky-700 dark:text-cyan-400">
-          Histórico ({history.length}/{maxHistoryLength})
+          {t("history")} ({history.length}/{maxHistoryLength})
         </h2>
 
         <Button
@@ -52,7 +55,7 @@ export function HistoryList({
           variant="ghost"
           size="sm"
           className="text-red-500 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
-          aria-label="Limpar histórico"
+          aria-label={t("clearHistory")}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -75,12 +78,13 @@ export function HistoryList({
                 </p>
 
                 <p className="mt-1 text-xs font-medium text-sky-700 dark:text-indigo-300">
-                  Taxa: 1 {item.from} = {formatExchangeRate(item.rate)} {item.to}
+                  {t("rate")}: 1 {item.from} = {formatExchangeRate(item.rate)}{" "}
+                  {item.to}
                 </p>
               </div>
 
               <p className="whitespace-nowrap text-xs font-medium text-slate-500 dark:text-indigo-400">
-                {formatTimestamp(item.timestamp)}
+                {formatTimestamp(item.timestamp, language)}
               </p>
             </div>
           </div>

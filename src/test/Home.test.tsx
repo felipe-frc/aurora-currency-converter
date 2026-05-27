@@ -1,7 +1,16 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Home from "@/pages/Home";
+
+function renderHome() {
+  return render(
+    <LanguageProvider defaultLanguage="pt-BR">
+      <Home />
+    </LanguageProvider>
+  );
+}
 
 describe("Home", () => {
   beforeEach(() => {
@@ -11,7 +20,7 @@ describe("Home", () => {
   });
 
   it("deve renderizar a tela principal do conversor", () => {
-    render(<Home />);
+    renderHome();
 
     expect(screen.getByText("Aurora")).toBeInTheDocument();
     expect(screen.getByText("Conversor de Moedas Premium")).toBeInTheDocument();
@@ -40,7 +49,7 @@ describe("Home", () => {
 
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<Home />);
+    renderHome();
 
     await user.click(screen.getByRole("button", { name: /converter/i }));
 
@@ -58,7 +67,7 @@ describe("Home", () => {
   it("deve salvar o par de moedas atual como favorito", async () => {
     const user = userEvent.setup();
 
-    render(<Home />);
+    renderHome();
 
     await user.click(
       screen.getByRole("button", { name: /salvar par como favorito/i })
@@ -84,7 +93,7 @@ describe("Home", () => {
 
     localStorage.setItem("currency_history", JSON.stringify(savedHistory));
 
-    render(<Home />);
+    renderHome();
 
     expect(await screen.findByText("Histórico (1/50)")).toBeInTheDocument();
 
@@ -105,7 +114,7 @@ describe("Home", () => {
 
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<Home />);
+    renderHome();
 
     const amountInput = screen.getByLabelText("Valor");
 
@@ -128,7 +137,7 @@ describe("Home", () => {
 
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<Home />);
+    renderHome();
 
     await user.click(screen.getByRole("button", { name: /converter/i }));
 
