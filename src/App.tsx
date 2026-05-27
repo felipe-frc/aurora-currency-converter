@@ -1,6 +1,8 @@
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { LanguageToggle } from "@/components/language/LanguageToggle";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Sonner } from "@/components/ui/sonner";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
@@ -20,9 +22,12 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
-        <Sonner />
-        <ThemeToggle />
-        <Router />
+        <LanguageProvider defaultLanguage="pt-BR">
+          <Sonner />
+          <ThemeToggle />
+          <LanguageToggle />
+          <Router />
+        </LanguageProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
