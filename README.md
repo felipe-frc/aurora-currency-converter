@@ -1,4 +1,12 @@
 [![CI (Front-end)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml)
+![Version](https://img.shields.io/badge/version-2.3.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-Vitest-yellow)
+![Coverage](https://img.shields.io/badge/coverage-enabled-brightgreen)
+![Deploy](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)
 
 # 💱 Aurora Currency Converter
 
@@ -31,6 +39,7 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Estilização moderna com Tailwind CSS, gradientes e glassmorphism;
 - Implementação de tema claro/escuro com variáveis CSS;
 - Testes automatizados com Vitest e Testing Library;
+- Relatório de cobertura de testes;
 - Integração contínua com GitHub Actions;
 - Deploy automatizado com Vercel;
 - Organização profissional de código e documentação para portfólio.
@@ -98,6 +107,7 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Testes do hook `useLocalStorage`;
 - Testes dos helpers de formatação monetária;
 - Testes do `ThemeProvider`, `useTheme` e `ThemeToggle`;
+- Relatório de cobertura com Vitest Coverage V8;
 - Execução automática dos testes no pipeline de CI.
 
 ---
@@ -115,6 +125,7 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 | Ícones | Lucide React |
 | Notificações | Sonner |
 | Testes | Vitest + Testing Library |
+| Cobertura | Vitest Coverage V8 |
 | Ambiente de testes | jsdom |
 | Linting | ESLint |
 | CI/CD | GitHub Actions |
@@ -373,7 +384,7 @@ npm run test:coverage
 
 ## 🧪 Testes Automatizados
 
-O projeto possui testes automatizados configurados com **Vitest**, **Testing Library** e **jsdom**, garantindo mais confiabilidade na evolução da aplicação.
+O projeto possui testes automatizados configurados com **Vitest**, **Testing Library**, **jsdom** e **Vitest Coverage V8**, garantindo mais confiabilidade na evolução da aplicação.
 
 Os testes atuais cobrem:
 
@@ -397,6 +408,14 @@ Os testes atuais cobrem:
 
 A configuração dos testes está integrada ao Vite por meio do `vite.config.ts`, utilizando ambiente `jsdom` para simular o navegador durante a execução dos testes.
 
+O relatório de cobertura pode ser gerado localmente com:
+
+```bash
+npm run test:coverage
+```
+
+O diretório `coverage/` é gerado localmente e não deve ser versionado no repositório.
+
 ---
 
 ## 🔁 CI/CD
@@ -410,10 +429,13 @@ npm ci
 npm run lint
 npm run type-check
 npm run test:run
+npm run test:coverage
 npm run build
 ```
 
-Isso garante que o projeto só evolua com lint, tipagem, testes e build de produção funcionando corretamente.
+Isso garante que o projeto só evolua com lint, tipagem, testes, cobertura e build de produção funcionando corretamente.
+
+Além disso, o workflow publica o relatório de cobertura como artifact da execução, permitindo consultar o diretório `coverage/` diretamente pelo GitHub Actions sem versionar esses arquivos no repositório.
 
 ---
 
@@ -425,7 +447,8 @@ Isso garante que o projeto só evolua com lint, tipagem, testes e build de produ
 - O histórico, favoritos e tema são persistidos no `localStorage`;
 - A URL base da API pode ser configurada pela variável `VITE_EXCHANGE_API_URL`;
 - O arquivo `.env.example` serve como modelo para configuração local do projeto;
-- Os testes automatizados utilizam mocks para validar comportamentos sem depender da API externa em tempo real.
+- Os testes automatizados utilizam mocks para validar comportamentos sem depender da API externa em tempo real;
+- O relatório de cobertura é gerado no diretório `coverage/` e deve permanecer fora do versionamento.
 
 ---
 
@@ -475,9 +498,15 @@ A URL base da API de câmbio foi configurada por meio da variável `VITE_EXCHANG
 
 O Vitest foi escolhido por ter integração nativa com o ecossistema Vite. A Testing Library foi utilizada para testar a aplicação a partir da perspectiva do usuário, validando interações, elementos visíveis e comportamentos importantes.
 
+### Cobertura de testes
+
+O projeto utiliza o provider `@vitest/coverage-v8` para gerar relatório de cobertura dos testes automatizados. Essa configuração permite acompanhar quais partes do código estão cobertas pelos testes e identificar pontos que podem receber novas validações.
+
 ### CI/CD com GitHub Actions
 
-A pipeline automatiza instalação, lint, tipagem, testes e build de produção, garantindo uma base mais segura para evolução do projeto.
+A pipeline automatiza instalação, lint, tipagem, testes, cobertura e build de produção, garantindo uma base mais segura para evolução do projeto.
+
+O relatório de cobertura é publicado como artifact do workflow, permitindo consulta pelo GitHub Actions sem versionar o diretório `coverage/`.
 
 ### Deploy automatizado na Vercel
 
@@ -535,8 +564,6 @@ Lançamento inicial com as funcionalidades principais: conversão em tempo real,
 
 ## 📈 Melhorias Futuras
 
-- Atualizar a versão do `package.json` para refletir a release mais recente;
-- Adicionar relatório de cobertura no GitHub Actions;
 - Adicionar testes específicos para mais componentes reutilizáveis;
 - Adicionar screenshots atualizados do tema claro e do tema escuro;
 - Adicionar gráfico de variação cambial por período;

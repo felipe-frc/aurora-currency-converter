@@ -35,5 +35,14 @@ jobs:
       - name: Executar testes
         run: npm run test:run
 
+      - name: Executar cobertura de testes
+        run: npm run test:coverage
+
       - name: Gerar build de produção
         run: npm run build
+
+      - name: Publicar relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
