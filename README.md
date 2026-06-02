@@ -3,14 +3,14 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-Bundler-646CFF?logo=vite&logoColor=white)
 ![Tests](https://img.shields.io/badge/tests-Vitest-yellow)
 ![Coverage](https://img.shields.io/badge/coverage-enabled-brightgreen)
 ![Deploy](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)
 
 # 💱 Aurora Currency Converter
 
-Aplicação web moderna para conversão de moedas em tempo real, com interface sofisticada, histórico de operações, sistema de favoritos, alternância real entre tema claro/escuro e foco em experiência do usuário.
+Aplicação web moderna para conversão de moedas com cotações atualizadas, interface sofisticada, histórico de operações, sistema de favoritos, alternância real entre tema claro/escuro e foco em experiência do usuário.
 
 Desenvolvida com **React**, **TypeScript**, **Vite** e **Tailwind CSS**, a aplicação consome uma API externa de câmbio para exibir cotações atualizadas, permitindo que o usuário converta valores entre múltiplas moedas, salve pares favoritos, consulte o histórico de conversões e personalize a experiência visual com persistência de tema no navegador.
 
@@ -31,7 +31,7 @@ A aplicação está publicada na **Vercel** com deploy automatizado a cada atual
 Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimentos em:
 
 - Desenvolvimento front-end moderno com React e TypeScript;
-- Consumo de APIs externas para dados em tempo real;
+- Consumo de APIs externas para dados atualizados;
 - Componentização e separação de responsabilidades;
 - Gerenciamento de estado com Context API;
 - Criação de hooks reutilizáveis;
@@ -50,7 +50,7 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 
 ### 💱 Conversão
 
-- Conversão de moedas em tempo real via API externa;
+- Conversão de moedas com cotações atualizadas via API externa;
 - Suporte a múltiplas moedas, incluindo BRL, USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY e ARS;
 - Inversão rápida entre moeda de origem e moeda de destino;
 - Exibição de bandeiras para identificação visual das moedas;
@@ -114,23 +114,23 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 
 ## 🛠️ Tecnologias
 
-| Camada | Tecnologia |
-| --- | --- |
-| Linguagem | TypeScript |
-| Biblioteca | React |
-| Bundler | Vite |
-| Estilização | Tailwind CSS |
-| Componentes acessíveis | Radix UI |
-| Roteamento | Wouter |
-| Ícones | Lucide React |
-| Notificações | Sonner |
-| Testes | Vitest + Testing Library |
-| Cobertura | Vitest Coverage V8 |
-| Ambiente de testes | jsdom |
-| Linting | ESLint |
-| CI/CD | GitHub Actions |
-| Deploy | Vercel |
-| Versionamento | Git / GitHub |
+| Camada                 | Tecnologia               |
+| ---------------------- | ------------------------ |
+| Linguagem              | TypeScript               |
+| Biblioteca             | React                    |
+| Bundler                | Vite                     |
+| Estilização            | Tailwind CSS             |
+| Componentes acessíveis | Radix UI                 |
+| Roteamento             | Wouter                   |
+| Ícones                 | Lucide React             |
+| Notificações           | Sonner                   |
+| Testes                 | Vitest + Testing Library |
+| Cobertura              | Vitest Coverage V8       |
+| Ambiente de testes     | jsdom                    |
+| Linting                | ESLint                   |
+| CI/CD                  | GitHub Actions           |
+| Deploy                 | Vercel                   |
+| Versionamento          | Git / GitHub             |
 
 ---
 
@@ -146,8 +146,10 @@ aurora-currency-converter/
 ├── docs/
 │   └── images/                      # Imagens utilizadas na documentação
 │       ├── conversion.png
+│       ├── dark-theme.png
 │       ├── history.png
-│       └── home.png
+│       ├── home.png
+│       └── light-theme.png
 │
 ├── public/                          # Arquivos públicos
 │
@@ -238,9 +240,25 @@ Tela inicial do Aurora Currency Converter com o conversor centralizado, seleçã
 
 ---
 
+### 🌙 Tema Escuro
+
+Interface principal no tema escuro, mantendo a identidade visual neon/glassmorphism do projeto.
+
+![Tema Escuro](./docs/images/dark-theme.png)
+
+---
+
+### ☀️ Tema Claro
+
+Interface principal no tema claro, com contraste ajustado, cards destacados e melhor legibilidade.
+
+![Tema Claro](./docs/images/light-theme.png)
+
+---
+
 ### 💱 Conversão de Moedas
 
-Resultado da conversão em tempo real com exibição do par de moedas, taxa de câmbio atual e botão de inversão rápida.
+Resultado da conversão com cotação atualizada, exibição do par de moedas, taxa de câmbio utilizada e botão de inversão rápida.
 
 ![Conversão](./docs/images/conversion.png)
 
@@ -281,6 +299,14 @@ cd aurora-currency-converter
 ---
 
 ### 3. Instale as dependências
+
+Para instalação reprodutível usando o `package-lock.json`:
+
+```bash
+npm ci
+```
+
+Ou, se preferir instalar de forma tradicional durante o desenvolvimento:
 
 ```bash
 npm install
@@ -443,7 +469,7 @@ Além disso, o workflow publica o relatório de cobertura como artifact da execu
 
 - A conversão depende de uma API externa de câmbio;
 - É necessário acesso à internet para o funcionamento completo da aplicação;
-- Os valores exibidos refletem as cotações em tempo real fornecidas pela API;
+- Os valores exibidos refletem as cotações atualizadas fornecidas pela API externa;
 - O histórico, favoritos e tema são persistidos no `localStorage`;
 - A URL base da API pode ser configurada pela variável `VITE_EXCHANGE_API_URL`;
 - O arquivo `.env.example` serve como modelo para configuração local do projeto;
@@ -540,9 +566,23 @@ Principais entregas:
 
 ### v2.2.0 — Testes automatizados e melhorias de confiabilidade
 
-Versão focada na implementação da primeira camada de testes automatizados do projeto, com Vitest, Testing Library, ambiente `jsdom`, testes para renderização, conversão, favoritos, histórico, validações e tratamento de erro da API, além da atualização do workflow para executar testes no GitHub Actions.
+Versão focada na implementação da primeira camada de testes automatizados do projeto, com Vitest, Testing Library e ambiente `jsdom`.
 
-Também inclui a configuração da variável de ambiente `VITE_EXCHANGE_API_URL` e o arquivo `.env.example`, facilitando a execução local e a manutenção da integração com a API de câmbio.
+Principais entregas:
+
+- Configuração do Vitest;
+- Configuração da Testing Library;
+- Configuração do ambiente `jsdom`;
+- Testes de renderização da tela principal;
+- Testes de conversão com API mockada;
+- Testes de favoritos;
+- Testes de histórico salvo no `localStorage`;
+- Testes de validação para valor inválido;
+- Testes de tratamento de erro da API;
+- Configuração do relatório de cobertura;
+- Atualização do workflow do GitHub Actions para executar testes;
+- Criação do `.env.example`;
+- Documentação da variável `VITE_EXCHANGE_API_URL`.
 
 ### v2.1.0 — Limpeza estrutural e melhorias de manutenção
 
@@ -558,7 +598,7 @@ Versão com grande evolução visual e estrutural: repaginação completa da int
 
 ### v1.0.0 — Primeira versão estável
 
-Lançamento inicial com as funcionalidades principais: conversão em tempo real, interface responsiva, histórico de conversões, sistema de favoritos, tratamento de erros e persistência via `localStorage`.
+Lançamento inicial com as funcionalidades principais: conversão com cotações atualizadas, interface responsiva, histórico de conversões, sistema de favoritos, tratamento de erros e persistência via `localStorage`.
 
 ---
 
@@ -582,7 +622,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ---
 
-## 👨‍💻 Autor
+## 👨🏻‍💻 Autor
 
 **Marcos Felipe França**
 
