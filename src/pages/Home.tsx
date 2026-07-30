@@ -1,4 +1,3 @@
-import { useCallback, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
 import { CurrencyResult } from "@/components/currency/CurrencyResult";
 import { CurrencySelect } from "@/components/currency/CurrencySelect";
@@ -8,19 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/useLanguage";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { fetchExchangeRate } from "@/services/exchangeService";
-import type { ConversionResult, Favorite } from "@/types/currency";
+import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
 import { ArrowRightLeft, Star, TrendingUp } from "lucide-react";
-import { toast } from "sonner";
-
-const MAX_HISTORY_LENGTH = 50;
-const MAX_FAVORITES_LENGTH = 20;
-
-const STORAGE_KEYS = {
-  history: "currency_history",
-  favorites: "currency_favorites",
-} as const;
 
 const GLASS_CARD_STYLE = {
   background: "var(--glass-bg)",
@@ -35,162 +23,33 @@ const INPUT_GLASS_STYLE = {
   borderColor: "var(--border)",
 } satisfies CSSProperties;
 
-const isObject = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === "object" && value !== null;
-};
-
-const validateConversionData = (data: unknown): data is ConversionResult[] => {
-  if (!Array.isArray(data)) return false;
-
-  return data.every(
-    (item) =>
-      isObject(item) &&
-      typeof item.from === "string" &&
-      typeof item.to === "string" &&
-      typeof item.amount === "number" &&
-      typeof item.result === "number" &&
-      typeof item.rate === "number" &&
-      typeof item.timestamp === "string"
-  );
-};
-
-const validateFavoritesData = (data: unknown): data is Favorite[] => {
-  if (!Array.isArray(data)) return false;
-
-  return data.every(
-    (item) =>
-      isObject(item) &&
-      typeof item.from === "string" &&
-      typeof item.to === "string"
-  );
-};
-
 export default function Home() {
   const { t } = useLanguage();
-
-  const [amount, setAmount] = useState<string>("100");
-  const [fromCurrency, setFromCurrency] = useState<string>("BRL");
-  const [toCurrency, setToCurrency] = useState<string>("USD");
-  const [result, setResult] = useState<ConversionResult | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const [history, setHistory] = useLocalStorage<ConversionResult[]>(
-    STORAGE_KEYS.history,
-    [],
-    validateConversionData
-  );
-
-  const [favorites, setFavorites] = useLocalStorage<Favorite[]>(
-    STORAGE_KEYS.favorites,
-    [],
-    validateFavoritesData
-  );
-
-  const convertCurrency = useCallback(async () => {
-    const numericAmount = Number(amount);
-
-    if (Number.isNaN(numericAmount) || numericAmount <= 0) {
-      toast.error(t("invalidAmount"));
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const rate = await fetchExchangeRate(fromCurrency, toCurrency);
-
-      const conversionData: ConversionResult = {
-        from: fromCurrency,
-        to: toCurrency,
-        amount: numericAmount,
-        result: numericAmount * rate,
-        rate,
-        timestamp: new Date().toISOString(),
-      };
-
-      setResult(conversionData);
-      setHistory((prev) =>
-        [conversionData, ...prev].slice(0, MAX_HISTORY_LENGTH)
-      );
-
-      toast.success(t("conversionSuccess"));
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : t("unknownError");
-
-      toast.error(`${t("errorPrefix")}: ${errorMessage}`);
-      console.error("Erro na conversão:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [amount, fromCurrency, setHistory, t, toCurrency]);
-
-  const swapCurrencies = useCallback(() => {
-    setFromCurrency(toCurrency);
-    setToCurrency(fromCurrency);
-    setResult(null);
-  }, [fromCurrency, toCurrency]);
-
-  const addToFavorites = useCallback(() => {
-    if (favorites.length >= MAX_FAVORITES_LENGTH) {
-      toast.error(`${t("favoriteLimit")}: ${MAX_FAVORITES_LENGTH}`);
-      return;
-    }
-
-    const favoriteExists = favorites.some(
-      (favorite) => favorite.from === fromCurrency && favorite.to === toCurrency
-    );
-
-    if (favoriteExists) {
-      toast.info(t("favoriteAlreadyExists"));
-      return;
-    }
-
-    const newFavorite: Favorite = {
-      from: fromCurrency,
-      to: toCurrency,
-    };
-
-    setFavorites((prev) =>
-      [...prev, newFavorite].slice(0, MAX_FAVORITES_LENGTH)
-    );
-
-    toast.success(t("favoriteAdded"));
-  }, [favorites, fromCurrency, setFavorites, t, toCurrency]);
-
-  const removeFavorite = useCallback(
-    (from: string, to: string) => {
-      setFavorites((prev) =>
-        prev.filter(
-          (favorite) => !(favorite.from === from && favorite.to === to)
-        )
-      );
-
-      toast.success(t("favoriteRemoved"));
-    },
-    [setFavorites, t]
-  );
-
-  const clearHistory = useCallback(() => {
-    setHistory([]);
-    setResult(null);
-    toast.success(t("historyCleared"));
-  }, [setHistory, t]);
-
-  const clearFavorites = useCallback(() => {
-    setFavorites([]);
-    toast.success(t("favoritesCleared"));
-  }, [setFavorites, t]);
-
-  const applyFavorite = useCallback((favorite: Favorite) => {
-    setFromCurrency(favorite.from);
-    setToCurrency(favorite.to);
-    setResult(null);
-  }, []);
+  const {
+    amount,
+    setAmount,
+    fromCurrency,
+    setFromCurrency,
+    toCurrency,
+    setToCurrency,
+    result,
+    loading,
+    history,
+    favorites,
+    maxHistoryLength,
+    maxFavoritesLength,
+    convertCurrency,
+    swapCurrencies,
+    addToFavorites,
+    removeFavorite,
+    clearHistory,
+    clearFavorites,
+    applyFavorite,
+  } = useCurrencyConverter();
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center overflow-x-clip px-4 py-8">
-      <div className="mb-12 text-center animate-fade-in">
+      <div className="mb-12 animate-fade-in text-center">
         <div className="mb-4 flex items-center justify-center gap-3">
           <div className="text-4xl">💱</div>
 
@@ -298,7 +157,7 @@ export default function Home() {
 
       <FavoritesList
         favorites={favorites}
-        maxFavoritesLength={MAX_FAVORITES_LENGTH}
+        maxFavoritesLength={maxFavoritesLength}
         cardStyle={GLASS_CARD_STYLE}
         onApplyFavorite={applyFavorite}
         onRemoveFavorite={removeFavorite}
@@ -307,7 +166,7 @@ export default function Home() {
 
       <HistoryList
         history={history}
-        maxHistoryLength={MAX_HISTORY_LENGTH}
+        maxHistoryLength={maxHistoryLength}
         cardStyle={GLASS_CARD_STYLE}
         onClearHistory={clearHistory}
       />

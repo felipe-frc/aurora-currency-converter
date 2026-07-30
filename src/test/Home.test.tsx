@@ -53,7 +53,10 @@ describe("Home", () => {
     await user.click(screen.getByRole("button", { name: /converter/i }));
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://api.exchangerate-api.com/v4/latest/BRL"
+      "https://api.exchangerate-api.com/v4/latest/BRL",
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+      })
     );
     expect(await screen.findByText("Histórico (1/50)")).toBeInTheDocument();
     expect(
@@ -135,7 +138,10 @@ describe("Home", () => {
     await user.click(screen.getByRole("button", { name: /converter/i }));
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://api.exchangerate-api.com/v4/latest/BRL"
+      "https://api.exchangerate-api.com/v4/latest/BRL",
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+      })
     );
 
     await waitFor(() => {
