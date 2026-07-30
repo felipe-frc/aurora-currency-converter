@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/useLanguage";
 import { getCurrency } from "@/data/currencies";
 
 const TWEMOJI_CDN =
@@ -9,6 +10,7 @@ type FlagImageProps = {
 };
 
 export function FlagImage({ code, sizeClass = "w-8 h-8" }: FlagImageProps) {
+  const { language, t } = useLanguage();
   const currency = getCurrency(code);
 
   if (!currency) {
@@ -18,7 +20,7 @@ export function FlagImage({ code, sizeClass = "w-8 h-8" }: FlagImageProps) {
   return (
     <img
       src={`${TWEMOJI_CDN}/${currency.emojiCode}.svg`}
-      alt={`Bandeira de ${currency.name}`}
+      alt={`${t("flagLabel")} ${currency.names[language]}`}
       className={`${sizeClass} rounded-md object-cover drop-shadow-lg`}
       loading="lazy"
       style={{ imageRendering: "crisp-edges" }}

@@ -1,4 +1,6 @@
 import React from "react";
+import { translations } from "@/i18n/translations";
+import type { Language } from "@/i18n/translations";
 
 type Props = {
   children: React.ReactNode;
@@ -6,6 +8,10 @@ type Props = {
 
 type State = {
   hasError: boolean;
+};
+
+const getLanguageFromDocument = (): Language => {
+  return document.documentElement.lang === "en-US" ? "en-US" : "pt-BR";
 };
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -19,18 +25,21 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("Erro capturado pelo ErrorBoundary:", error, errorInfo);
+    console.error("Error captured by ErrorBoundary:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
+      const language = getLanguageFromDocument();
+      const copy = translations[language];
+
       return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white px-6">
+        <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-2">Algo deu errado</h1>
-            <p className="text-slate-300">
-              Recarregue a página e tente novamente.
-            </p>
+            <h1 className="mb-2 text-2xl font-bold">
+              {copy.unexpectedErrorTitle}
+            </h1>
+            <p className="text-slate-300">{copy.unexpectedErrorDescription}</p>
           </div>
         </div>
       );

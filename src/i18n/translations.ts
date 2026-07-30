@@ -34,6 +34,13 @@ export const translations = {
     swapCurrencies: "Inverter moedas",
     unknownError: "Erro desconhecido",
     errorPrefix: "Erro",
+    themeToLight: "Ativar tema claro",
+    themeToDark: "Ativar tema escuro",
+    flagLabel: "Bandeira de",
+    notFoundMessage: "Página não encontrada.",
+    backToHome: "Voltar para o início",
+    unexpectedErrorTitle: "Algo deu errado",
+    unexpectedErrorDescription: "Recarregue a página e tente novamente.",
   },
   "en-US": {
     languageLabel: "English",
@@ -66,6 +73,13 @@ export const translations = {
     swapCurrencies: "Swap currencies",
     unknownError: "Unknown error",
     errorPrefix: "Error",
+    themeToLight: "Enable light theme",
+    themeToDark: "Enable dark theme",
+    flagLabel: "Flag of",
+    notFoundMessage: "Page not found.",
+    backToHome: "Back to home",
+    unexpectedErrorTitle: "Something went wrong",
+    unexpectedErrorDescription: "Reload the page and try again.",
   },
 } as const;
 

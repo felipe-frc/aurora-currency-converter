@@ -71,15 +71,15 @@ export function HistoryList({
               <div>
                 <p className="flex flex-wrap items-center gap-2 font-semibold text-slate-800 dark:text-white">
                   <FlagImage code={item.from} sizeClass="w-5 h-5" />
-                  {formatCurrency(item.amount, item.from)}
+                  {formatCurrency(item.amount, item.from, language)}
                   <span className="text-sky-600 dark:text-cyan-400">→</span>
                   <FlagImage code={item.to} sizeClass="w-5 h-5" />
-                  {formatCurrency(item.result, item.to)}
+                  {formatCurrency(item.result, item.to, language)}
                 </p>
 
                 <p className="mt-1 text-xs font-medium text-sky-700 dark:text-indigo-300">
-                  {t("rate")}: 1 {item.from} = {formatExchangeRate(item.rate)}{" "}
-                  {item.to}
+                  {t("rate")}: 1 {item.from} ={" "}
+                  {formatExchangeRate(item.rate, language)} {item.to}
                 </p>
               </div>
 

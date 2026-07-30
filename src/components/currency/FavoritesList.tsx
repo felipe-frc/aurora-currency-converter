@@ -24,7 +24,7 @@ export function FavoritesList({
   onRemoveFavorite,
   onClearFavorites,
 }: FavoritesListProps) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   if (favorites.length === 0) {
     return null;
@@ -74,8 +74,8 @@ export function FavoritesList({
                 {favorite.to}
               </span>
               <span className="sr-only">
-                {getCurrencyLabel(favorite.from)} {t("to")}{" "}
-                {getCurrencyLabel(favorite.to)}
+                {getCurrencyLabel(favorite.from, language)} {t("to")}{" "}
+                {getCurrencyLabel(favorite.to, language)}
               </span>
             </button>
 

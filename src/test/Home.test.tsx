@@ -3,10 +3,11 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Home from "@/pages/Home";
+import type { Language } from "@/i18n/translations";
 
-function renderHome() {
+function renderHome(language: Language = "pt-BR") {
   return render(
-    <LanguageProvider defaultLanguage="pt-BR">
+    <LanguageProvider defaultLanguage={language}>
       <Home />
     </LanguageProvider>
   );
@@ -25,11 +26,9 @@ describe("Home", () => {
     expect(screen.getByText("Aurora")).toBeInTheDocument();
     expect(screen.getByText("Conversor de Moedas Premium")).toBeInTheDocument();
     expect(screen.getByLabelText("Valor")).toBeInTheDocument();
-
     expect(
       screen.getByRole("button", { name: /converter/i })
     ).toBeInTheDocument();
-
     expect(
       screen.getByRole("button", { name: /salvar par como favorito/i })
     ).toBeInTheDocument();
@@ -56,9 +55,7 @@ describe("Home", () => {
     expect(fetchMock).toHaveBeenCalledWith(
       "https://api.exchangerate-api.com/v4/latest/BRL"
     );
-
     expect(await screen.findByText("Histórico (1/50)")).toBeInTheDocument();
-
     expect(
       await screen.findByText("Taxa de câmbio: 1 Real Brasileiro = 0,2000 USD")
     ).toBeInTheDocument();
@@ -74,7 +71,6 @@ describe("Home", () => {
     );
 
     expect(await screen.findByText("Favoritos (1/20)")).toBeInTheDocument();
-
     expect(screen.getAllByText("BRL").length).toBeGreaterThan(0);
     expect(screen.getAllByText("USD").length).toBeGreaterThan(0);
   });
@@ -96,13 +92,10 @@ describe("Home", () => {
     renderHome();
 
     expect(await screen.findByText("Histórico (1/50)")).toBeInTheDocument();
-
     expect(screen.getByText("Taxa: 1 BRL = 0,2000 USD")).toBeInTheDocument();
-
     expect(
       screen.getAllByAltText("Bandeira de Real Brasileiro").length
     ).toBeGreaterThan(0);
-
     expect(
       screen.getAllByAltText("Bandeira de Dólar Americano").length
     ).toBeGreaterThan(0);
@@ -149,5 +142,36 @@ describe("Home", () => {
       expect(screen.queryByText(/Taxa de câmbio:/i)).not.toBeInTheDocument();
       expect(screen.queryByText("Histórico (1/50)")).not.toBeInTheDocument();
     });
+  });
+
+  it("deve renderizar textos e formatação em inglês quando o idioma for en-US", async () => {
+    const user = userEvent.setup();
+
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        rates: {
+          USD: 0.2,
+        },
+      }),
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    renderHome("en-US");
+
+    expect(screen.getByText("Premium Currency Converter")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /save pair as favorite/i })
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /convert/i }));
+
+    expect(await screen.findByText("History (1/50)")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Exchange rate: 1 Brazilian Real = 0.2000 USD")
+    ).toBeInTheDocument();
+    expect(screen.getAllByAltText("Flag of Brazilian Real").length).toBeGreaterThan(0);
+    expect(screen.getByText("$20.00")).toBeInTheDocument();
   });
 });

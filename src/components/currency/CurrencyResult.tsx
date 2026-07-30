@@ -8,21 +8,21 @@ type CurrencyResultProps = {
 };
 
 export function CurrencyResult({ result }: CurrencyResultProps) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <div className="mt-6 animate-fade-in rounded-2xl border border-sky-300/70 bg-white/75 p-6 text-center shadow-sm dark:border-cyan-400/30 dark:bg-cyan-500/10">
       <p className="text-lg font-medium text-slate-700 dark:text-indigo-200">
-        {formatCurrency(result.amount, result.from)} {t("equalsTo")}
+        {formatCurrency(result.amount, result.from, language)} {t("equalsTo")}
       </p>
 
       <p className="my-2 text-4xl font-bold text-slate-900 dark:text-white">
-        {formatCurrency(result.result, result.to)}
+        {formatCurrency(result.result, result.to, language)}
       </p>
 
       <p className="text-sm font-medium text-sky-700 dark:text-indigo-300">
-        {t("exchangeRate")}: 1 {getCurrencyLabel(result.from)} ={" "}
-        {formatExchangeRate(result.rate)} {result.to}
+        {t("exchangeRate")}: 1 {getCurrencyLabel(result.from, language)} ={" "}
+        {formatExchangeRate(result.rate, language)} {result.to}
       </p>
     </div>
   );

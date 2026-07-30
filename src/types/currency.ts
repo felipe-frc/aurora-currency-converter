@@ -1,6 +1,8 @@
+import type { Language } from "@/i18n/translations";
+
 export type Currency = {
   code: string;
-  name: string;
+  names: Record<Language, string>;
   emoji: string;
   emojiCode: string;
 };

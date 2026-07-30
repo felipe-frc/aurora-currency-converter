@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLanguage } from "@/contexts/useLanguage";
 import type { CSSProperties } from "react";
 
 type CurrencySelectProps = {
@@ -26,6 +27,7 @@ export function CurrencySelect({
   className = "",
   triggerStyle,
 }: CurrencySelectProps) {
+  const { language } = useLanguage();
   const labelId = `${id}-label`;
 
   return (
@@ -69,7 +71,7 @@ export function CurrencySelect({
                 <FlagImage code={currency.code} sizeClass="w-6 h-6" />
                 <span className="font-semibold">{currency.code}</span>
                 <span className="text-xs text-slate-500 dark:text-gray-400">
-                  ({currency.name})
+                  ({currency.names[language]})
                 </span>
               </span>
             </SelectItem>

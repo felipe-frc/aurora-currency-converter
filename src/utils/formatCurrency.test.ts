@@ -10,8 +10,14 @@ describe("formatCurrency", () => {
     expect(normalizeCurrencyText(formatCurrency(100, "BRL"))).toBe("R$ 100,00");
   });
 
-  it("deve formatar valores em Dólar Americano", () => {
+  it("deve formatar valores em Dólar Americano com locale pt-BR", () => {
     expect(normalizeCurrencyText(formatCurrency(20, "USD"))).toBe("US$ 20,00");
+  });
+
+  it("deve formatar valores em Dólar Americano com locale en-US", () => {
+    expect(normalizeCurrencyText(formatCurrency(20, "USD", "en-US"))).toBe(
+      "$20.00"
+    );
   });
 
   it("deve retornar fallback quando o código da moeda for inválido", () => {
@@ -26,5 +32,9 @@ describe("formatExchangeRate", () => {
 
   it("deve arredondar taxa de câmbio corretamente", () => {
     expect(formatExchangeRate(0.123456)).toBe("0,1235");
+  });
+
+  it("deve usar o locale en-US quando informado", () => {
+    expect(formatExchangeRate(0.123456, "en-US")).toBe("0.1235");
   });
 });
