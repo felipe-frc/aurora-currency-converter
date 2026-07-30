@@ -32,9 +32,6 @@ jobs:
       - name: Verificar tipagem
         run: npm run type-check
 
-      - name: Executar testes
-        run: npm run test:run
-
       - name: Executar cobertura de testes
         run: npm run test:coverage
 
