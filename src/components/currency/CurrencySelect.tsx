@@ -59,7 +59,9 @@ export function CurrencySelect({
           position="popper"
           sideOffset={8}
           align="start"
-          className="z-[9999] max-h-72 w-[min(360px,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-sky-300/70 bg-white/95 text-slate-900 shadow-xl backdrop-blur-xl dark:border-cyan-500/30 dark:bg-slate-950/95 dark:text-white"
+          className="z-[9999] w-[min(360px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-sky-300/70 bg-white/95 text-slate-900 shadow-xl backdrop-blur-xl dark:border-cyan-500/30 dark:bg-slate-950/95 dark:text-white"
+          scrollAreaClassName="currency-select-scrollbar h-72 overflow-y-scroll overflow-x-hidden pr-2"
+          viewportClassName="min-w-full"
         >
           {CURRENCIES.map((currency) => (
             <SelectItem

@@ -345,6 +345,68 @@
       transform 0.2s ease-in-out,
       opacity 0.2s ease-in-out;
   }
+
+  .currency-select-scrollbar {
+    scrollbar-gutter: stable;
+    scrollbar-color: rgba(56, 189, 248, 0.9) rgba(148, 163, 184, 0.22);
+    scrollbar-width: auto;
+  }
+
+  .dark .currency-select-scrollbar {
+    scrollbar-color: rgba(34, 211, 238, 0.9) rgba(15, 23, 42, 0.88);
+  }
+
+  .currency-select-scrollbar::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  .currency-select-scrollbar::-webkit-scrollbar-track {
+    margin: 10px 0;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.32);
+  }
+
+  .currency-select-scrollbar::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: linear-gradient(
+      180deg,
+      rgba(56, 189, 248, 1),
+      rgba(14, 165, 233, 0.88)
+    );
+    background-clip: padding-box;
+  }
+
+  .currency-select-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(14, 165, 233, 1),
+      rgba(2, 132, 199, 0.9)
+    );
+    background-clip: padding-box;
+  }
+
+  .dark .currency-select-scrollbar::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.95);
+  }
+
+  .dark .currency-select-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      rgba(34, 211, 238, 0.95),
+      rgba(6, 182, 212, 0.82)
+    );
+    background-clip: padding-box;
+  }
+
+  .dark .currency-select-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(103, 232, 249, 0.98),
+      rgba(34, 211, 238, 0.88)
+    );
+    background-clip: padding-box;
+  }
 }
 
 @layer utilities {
