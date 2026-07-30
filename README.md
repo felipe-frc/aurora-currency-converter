@@ -1,5 +1,5 @@
 [![CI (Front-end)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml)
-![Version](https://img.shields.io/badge/version-2.4.0-blue)
+![Version](https://img.shields.io/badge/version-2.4.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
@@ -548,7 +548,19 @@ O deploy na Vercel é atualizado automaticamente a cada alteração enviada para
 
 ## 🧾 Releases
 
-### v2.4.0 — Fechamento de arquitetura, i18n completo e hardening **Latest**
+### v2.4.1 — Fechamento final, correções de UX e preparação para release **Latest**
+
+Versão focada no fechamento final do projeto, com correções de usabilidade no seletor de moedas, organização de versionamento, sincronização do branch principal e revisão completa da base antes da nova tag.
+
+Principais entregas:
+
+- Correção definitiva da scrollbar visível no painel de moedas nos temas claro e escuro;
+- Sincronização final do `main` com o GitHub antes da publicação;
+- Revisão de validação completa com lint, tipagem, testes com cobertura e build;
+- Atualização de metadados para a nova versão `2.4.1`;
+- Preparação do projeto para criação manual da nova tag/release.
+
+### v2.4.0 — Fechamento de arquitetura, i18n completo e hardening
 
 Versão focada em consolidar o projeto como uma entrega final mais sólida, com internacionalização consistente em toda a interface, refatoração da lógica principal de conversão, tratamento de timeout/cancelamento na integração com a API e fortalecimento da cobertura de testes.
 
