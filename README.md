@@ -1,5 +1,5 @@
 [![CI (Front-end)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/felipe-frc/aurora-currency-converter/actions/workflows/frontend-ci.yml)
-![Version](https://img.shields.io/badge/version-2.3.0-blue)
+![Version](https://img.shields.io/badge/version-2.4.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
@@ -104,8 +104,11 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Testes de validação para valor inválido;
 - Testes de tratamento de erro da API;
 - Testes do service de câmbio;
+- Testes do hook `useCurrencyConverter`;
 - Testes do hook `useLocalStorage`;
 - Testes dos helpers de formatação monetária;
+- Testes dos hooks `useLanguage` e `useTheme`;
+- Testes do `LanguageToggle`;
 - Testes do `ThemeProvider`, `useTheme` e `ThemeToggle`;
 - Relatório de cobertura com Vitest Coverage V8;
 - Execução automática dos testes no pipeline de CI.
@@ -454,12 +457,11 @@ A cada `push` ou `pull_request` para a branch `main`, o workflow executa:
 npm ci
 npm run lint
 npm run type-check
-npm run test:run
 npm run test:coverage
 npm run build
 ```
 
-Isso garante que o projeto só evolua com lint, tipagem, testes, cobertura e build de produção funcionando corretamente.
+Isso garante que o projeto só evolua com lint, tipagem, suíte de testes com cobertura e build de produção funcionando corretamente.
 
 Além disso, o workflow publica o relatório de cobertura como artifact da execução, permitindo consultar o diretório `coverage/` diretamente pelo GitHub Actions sem versionar esses arquivos no repositório.
 
@@ -494,13 +496,17 @@ A combinação de Tailwind CSS com Radix UI permite construir uma interface esti
 
 ### Service para API de câmbio
 
-A comunicação com a API externa foi separada em `exchangeService.ts`, isolando a montagem da URL, a chamada `fetch`, a validação da resposta HTTP e o tratamento de taxas inválidas.
+A comunicação com a API externa foi separada em `exchangeService.ts`, isolando a montagem da URL, a chamada `fetch`, a validação da resposta HTTP, timeout configurável, cancelamento com `AbortController` e o tratamento de taxas inválidas.
 
 Essa separação deixa a `Home.tsx` mais limpa e facilita a criação de testes automatizados para a integração com a API.
 
 ### Hook `useLocalStorage`
 
 A lógica de leitura, validação e escrita no `localStorage` foi extraída para um hook reutilizável, permitindo reaproveitamento em histórico, favoritos e futuras preferências da aplicação.
+
+### Hook `useCurrencyConverter`
+
+As regras de conversão, favoritos, histórico, cancelamento de requisições e mensagens de feedback foram centralizadas no hook `useCurrencyConverter`, reduzindo o acoplamento da `Home.tsx` e deixando a arquitetura da tela principal mais previsível para manutenção e evolução.
 
 ### Context API para tema claro/escuro
 
@@ -526,7 +532,7 @@ O Vitest foi escolhido por ter integração nativa com o ecossistema Vite. A Tes
 
 ### Cobertura de testes
 
-O projeto utiliza o provider `@vitest/coverage-v8` para gerar relatório de cobertura dos testes automatizados. Essa configuração permite acompanhar quais partes do código estão cobertas pelos testes e identificar pontos que podem receber novas validações.
+O projeto utiliza o provider `@vitest/coverage-v8` para gerar relatório de cobertura dos testes automatizados. Essa configuração permite acompanhar quais partes do código estão cobertas pelos testes, identificar pontos que podem receber novas validações e aplicar thresholds mínimos no pipeline para evitar regressões silenciosas.
 
 ### CI/CD com GitHub Actions
 
@@ -542,7 +548,22 @@ O deploy na Vercel é atualizado automaticamente a cada alteração enviada para
 
 ## 🧾 Releases
 
-### v2.3.0 — Tema claro/escuro, refatoração e testes **Latest**
+### v2.4.0 — Fechamento de arquitetura, i18n completo e hardening **Latest**
+
+Versão focada em consolidar o projeto como uma entrega final mais sólida, com internacionalização consistente em toda a interface, refatoração da lógica principal de conversão, tratamento de timeout/cancelamento na integração com a API e fortalecimento da cobertura de testes.
+
+Principais entregas:
+
+- Internacionalização completa de textos, rótulos, acessibilidade e formatação monetária;
+- Localização das telas de erro e de rota não encontrada;
+- Refatoração da regra principal para o hook `useCurrencyConverter`;
+- Tratamento de timeout, cancelamento e falhas de rede no `exchangeService`;
+- Otimização para conversões com o mesmo par de moedas sem chamada desnecessária à API;
+- Ampliação da suíte automatizada para hooks, toggles e regras centrais de negócio;
+- Cobertura automatizada com thresholds mínimos configurados no Vitest;
+- Simplificação do workflow de CI para executar a suíte com cobertura em uma única etapa.
+
+### v2.3.0 — Tema claro/escuro, refatoração e testes
 
 Versão focada na implementação real de tema claro/escuro, com botão de alternância, persistência no `localStorage`, aplicação das classes `dark` e `light` no `document.documentElement` e ajustes visuais para melhorar contraste e legibilidade no tema claro.
 
