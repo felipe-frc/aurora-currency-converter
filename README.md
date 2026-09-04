@@ -5,14 +5,15 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-Bundler-646CFF?logo=vite&logoColor=white)
 ![Tests](https://img.shields.io/badge/tests-Vitest-yellow)
+![E2E](https://img.shields.io/badge/E2E-Playwright-2EAD33?logo=playwright&logoColor=white)
 ![Coverage](https://img.shields.io/badge/coverage-enabled-brightgreen)
 ![Deploy](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)
 
 # 💱 Aurora Currency Converter
 
-Aplicação front-end desenvolvida com **React 19**, **TypeScript**, **Vite** e **Tailwind CSS**, criada para demonstrar práticas de engenharia de software aplicadas a uma interface real: separação de responsabilidades, custom hooks, integração resiliente com API externa, internacionalização, persistência local, testes automatizados e integração contínua.
+Aplicação front-end desenvolvida com **React 19**, **TypeScript**, **Vite** e **Tailwind CSS**, criada para demonstrar práticas de engenharia de software aplicadas a uma interface real: separação de responsabilidades, custom hooks, integração resiliente com API externa, internacionalização, persistência local, testes automatizados, testes E2E e integração contínua.
 
-Embora o domínio seja um conversor de moedas, o foco técnico do projeto está na construção de uma base front-end organizada, tipada e testável. A lógica principal foi isolada em hooks e services, o estado compartilhado utiliza Context API, a interface possui suporte a **pt-BR e en-US**, e o pipeline de CI valida lint, tipagem, testes com cobertura e build de produção.
+Embora o domínio seja um conversor de moedas, o foco técnico do projeto está na construção de uma base front-end organizada, tipada e testável. A lógica principal foi isolada em hooks e services, o estado compartilhado utiliza Context API, a interface possui suporte a **pt-BR e en-US**, e o pipeline de CI valida lint, tipagem, testes com cobertura, testes E2E com Playwright e build de produção.
 
 ---
 
@@ -39,9 +40,11 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Tratamento tipado de erros, timeout e cancelamento de requisições;
 - Persistência e validação de dados no `localStorage`;
 - Tema claro/escuro com persistência da preferência do usuário;
-- Testes automatizados com Vitest e Testing Library;
+- Testes unitários e de integração com Vitest e Testing Library;
+- Testes E2E com Playwright em Chromium;
+- Mock de API externa em testes automatizados;
 - Cobertura de testes com Vitest Coverage V8;
-- Lint, verificação de tipos e build automatizados;
+- Lint, verificação de tipos, testes e build automatizados;
 - Integração contínua com GitHub Actions;
 - Deploy automatizado com Vercel;
 - Organização profissional de código e documentação para portfólio.
@@ -62,9 +65,11 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Context API para gerenciamento global de idioma e tema;
 - Persistência de idioma, tema, favoritos e histórico no navegador;
 - Testes unitários e de integração com Vitest e Testing Library;
-- API externa mockada durante os testes automatizados;
+- Testes E2E com Playwright executados em Chromium;
+- API externa mockada também no fluxo E2E de conversão;
+- Relatório HTML do Playwright com screenshot, vídeo e trace em cenários de falha;
 - Cobertura de testes com provider V8 e thresholds mínimos;
-- Pipeline de CI executando lint, type-check, testes com cobertura e build;
+- Pipeline de CI executando lint, type-check, cobertura, build e testes E2E;
 - TypeScript utilizado para modelagem de domínio, contratos e estados da aplicação.
 
 ---
@@ -143,6 +148,7 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Testes dos hooks `useLanguage` e `useTheme`;
 - Testes do `LanguageToggle`;
 - Testes do `ThemeProvider`, `useTheme` e `ThemeToggle`;
+- Testes E2E de carregamento, preenchimento, tema, idioma e conversão;
 - Relatório de cobertura com Vitest Coverage V8;
 - Execução automática dos testes no pipeline de CI.
 
@@ -150,23 +156,25 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 
 ## 🛠️ Tecnologias
 
-| Camada                  | Tecnologia                |
-| ----------------------- | ------------------------- |
-| Linguagem               | TypeScript                |
-| Biblioteca              | React                     |
-| Bundler                 | Vite                      |
-| Estilização             | Tailwind CSS              |
-| Componentes acessíveis  | Radix UI                  |
-| Roteamento              | Wouter                    |
-| Ícones                  | Lucide React              |
-| Notificações            | Sonner                    |
-| Testes                  | Vitest + Testing Library  |
-| Cobertura               | Vitest Coverage V8        |
-| Ambiente de testes      | jsdom                     |
-| Linting                 | ESLint                    |
-| CI/CD                   | GitHub Actions            |
-| Deploy                  | Vercel                    |
-| Versionamento           | Git / GitHub              |
+| Camada                      | Tecnologia               |
+| --------------------------- | ------------------------ |
+| Linguagem                   | TypeScript               |
+| Biblioteca                  | React                    |
+| Bundler                     | Vite                     |
+| Estilização                 | Tailwind CSS             |
+| Componentes acessíveis      | Radix UI                 |
+| Roteamento                  | Wouter                   |
+| Ícones                      | Lucide React             |
+| Notificações                | Sonner                   |
+| Testes unitários/integrados | Vitest + Testing Library |
+| Testes E2E                  | Playwright               |
+| Navegador E2E               | Chromium                 |
+| Cobertura                   | Vitest Coverage V8       |
+| Ambiente de testes          | jsdom                    |
+| Linting                     | ESLint                   |
+| CI/CD                       | GitHub Actions           |
+| Deploy                      | Vercel                   |
+| Versionamento               | Git / GitHub             |
 
 ---
 
@@ -177,7 +185,7 @@ aurora-currency-converter/
 │
 ├── .github/
 │   └── workflows/
-│       └── frontend-ci.yml              # Pipeline de validação do front-end
+│       └── frontend-ci.yml              # Pipeline de validação do front-end e E2E
 │
 ├── docs/
 │   └── images/                          # Imagens utilizadas na documentação
@@ -187,7 +195,10 @@ aurora-currency-converter/
 │       ├── home.png
 │       └── light-theme.png
 │
-├── public/                              # Arquivos públicos
+├── e2e/
+│   └── aurora.spec.ts                   # Fluxos E2E executados com Playwright
+│
+├── public/                               # Arquivos públicos
 │
 ├── src/
 │   ├── components/
@@ -272,6 +283,7 @@ aurora-currency-converter/
 ├── LICENSE
 ├── package.json
 ├── package-lock.json
+├── playwright.config.ts                 # Configuração dos testes E2E
 ├── tsconfig.app.json
 ├── tsconfig.json
 ├── tsconfig.node.json
@@ -335,9 +347,7 @@ Painel de histórico com o registro das conversões realizadas, incluindo par de
 ### 1. Clone o repositório
 
 ```bash
-
 git clone https://github.com/felipe-frc/aurora-currency-converter.git
-
 ```
 
 ---
@@ -345,9 +355,7 @@ git clone https://github.com/felipe-frc/aurora-currency-converter.git
 ### 2. Acesse a pasta do projeto
 
 ```bash
-
 cd aurora-currency-converter
-
 ```
 
 ---
@@ -357,17 +365,13 @@ cd aurora-currency-converter
 Para instalação reprodutível usando o `package-lock.json`:
 
 ```bash
-
 npm ci
-
 ```
 
 Ou, se preferir instalar de forma tradicional durante o desenvolvimento:
 
 ```bash
-
 npm install
-
 ```
 
 ---
@@ -379,55 +383,42 @@ Crie um arquivo `.env` na raiz do projeto com base no arquivo `.env.example`.
 No Windows:
 
 ```bash
-
 copy .env.example .env
-
 ```
 
 No Linux/macOS:
 
 ```bash
-
 cp .env.example .env
-
 ```
 
 O arquivo `.env` deve conter:
 
 ```env
-
 VITE_EXCHANGE_API_URL=https://api.exchangerate-api.com/v4/latest
-
 ```
 
-_> A API utilizada nesta versão não exige chave de autenticação. A variável acima permite configurar a URL base da API de câmbio usada pela aplicação._
+> A API utilizada nesta versão não exige chave de autenticação. A variável acima permite configurar a URL base da API de câmbio usada pela aplicação.
 
 ---
 
 ### 5. Execute o projeto em modo de desenvolvimento
 
 ```bash
-
 npm run dev
-
 ```
 
 Após iniciar, o terminal exibirá uma URL parecida com:
 
 ```txt
-
 VITE ready in Xms
-
-➜  Local:   http://localhost:5173/
-
+➜  Local:   http://localhost:5173/
 ```
 
 Abra essa URL no navegador:
 
 ```txt
-
 http://localhost:5173
-
 ```
 
 ---
@@ -435,9 +426,7 @@ http://localhost:5173
 ### 6. Gere o build de produção
 
 ```bash
-
 npm run build
-
 ```
 
 ---
@@ -445,9 +434,7 @@ npm run build
 ### 7. Execute o lint
 
 ```bash
-
 npm run lint
-
 ```
 
 ---
@@ -455,46 +442,68 @@ npm run lint
 ### 8. Execute a verificação de tipos
 
 ```bash
-
 npm run type-check
-
 ```
 
 ---
 
-### 9. Execute os testes automatizados
+### 9. Execute os testes com Vitest
 
 Para executar os testes uma única vez:
 
 ```bash
-
 npm run test:run
-
 ```
 
 Para executar os testes em modo observação durante o desenvolvimento:
 
 ```bash
-
 npm run test
-
 ```
 
 Para executar os testes com relatório de cobertura:
 
 ```bash
-
 npm run test:coverage
+```
 
+---
+
+### 10. Execute os testes E2E com Playwright
+
+Na primeira execução, instale o Chromium gerenciado pelo Playwright:
+
+```bash
+npx playwright install chromium
+```
+
+Execute os testes E2E:
+
+```bash
+npm run test:e2e
+```
+
+Para abrir a interface interativa do Playwright:
+
+```bash
+npm run test:e2e:ui
+```
+
+Para visualizar o último relatório HTML:
+
+```bash
+npm run test:e2e:report
 ```
 
 ---
 
 ## 🧪 Testes Automatizados
 
-O projeto possui testes automatizados configurados com **Vitest**, **Testing Library**, **jsdom** e **Vitest Coverage V8**, com foco tanto em comportamento visível quanto nas unidades responsáveis pela lógica da aplicação.
+O projeto possui duas camadas complementares de testes: **Vitest + Testing Library** para testes unitários e de integração e **Playwright** para validação E2E em navegador.
 
-Os testes atuais cobrem:
+### Vitest + Testing Library
+
+A suíte utiliza **jsdom** e **Vitest Coverage V8** e cobre:
 
 - Renderização da tela principal do conversor;
 - Conversão de moedas com retorno de API mockado;
@@ -512,15 +521,51 @@ Os testes atuais cobrem:
 - `LanguageProvider`, hook `useLanguage` e `LanguageToggle`;
 - `ThemeProvider`, hook `useTheme` e `ThemeToggle`.
 
-A configuração dos testes está integrada ao Vite por meio do `vite.config.ts`, utilizando ambiente `jsdom` para simular o navegador. As chamadas externas são mockadas nos testes para que a suíte não dependa da disponibilidade da API real.
+A configuração está integrada ao Vite por meio do `vite.config.ts`. A pasta `e2e/` é excluída da descoberta do Vitest para manter a suíte unitária/integrada separada da suíte Playwright.
 
-O relatório de cobertura pode ser gerado localmente com:
+O relatório de cobertura pode ser gerado com:
 
 ```bash
 npm run test:coverage
 ```
 
+Os thresholds mínimos configurados são:
+
+| Métrica    | Mínimo |
+| ---------- | -----: |
+| Lines      |    80% |
+| Functions  |    75% |
+| Statements |    80% |
+| Branches   |    70% |
+
 O diretório `coverage/` é gerado localmente e não deve ser versionado no repositório.
+
+### Playwright E2E
+
+Os testes E2E estão em `e2e/aurora.spec.ts` e são executados em **Chromium**.
+
+A suíte valida os principais fluxos de ponta a ponta:
+
+- Carregamento correto da aplicação;
+- Preenchimento do valor da conversão;
+- Troca entre tema claro e escuro;
+- Troca de idioma;
+- Conversão de moeda com resposta controlada da API por meio de mock de rede.
+
+O fluxo de conversão E2E intercepta a chamada da API externa para tornar o teste determinístico e independente da disponibilidade ou da cotação real do serviço.
+
+O `playwright.config.ts` também está configurado para:
+
+- Executar testes em paralelo localmente;
+- Utilizar uma única worker no CI;
+- Fazer retries no ambiente de CI;
+- Gerar trace na primeira repetição após falha;
+- Capturar screenshot somente em falhas;
+- Reter vídeo quando houver falha;
+- Gerar relatório HTML em `playwright-report/`;
+- Inicializar automaticamente o preview do Vite em `http://127.0.0.1:4173`.
+
+Os diretórios `playwright-report/`, `test-results/` e `blob-report/` são artefatos locais e permanecem fora do versionamento.
 
 ---
 
@@ -531,35 +576,38 @@ O projeto possui pipeline de integração contínua com **GitHub Actions**.
 A cada `push` ou `pull_request` para a branch `main`, o workflow executa:
 
 ```bash
-
 npm ci
-
 npm run lint
-
 npm run type-check
-
 npm run test:coverage
-
 npm run build
-
+npx playwright install --with-deps chromium
+npx playwright test
 ```
 
-Isso garante que o projeto só evolua com lint, tipagem, suíte de testes com cobertura e build de produção funcionando corretamente.
+Esse fluxo garante que lint, tipagem, testes unitários/integrados, thresholds de cobertura, build de produção e testes E2E estejam funcionando antes da validação do pipeline.
 
-Além disso, o workflow publica o relatório de cobertura como artifact da execução, permitindo consultar o diretório `coverage/` diretamente pelo GitHub Actions sem versionar esses arquivos no repositório.
+O workflow publica:
+
+- O relatório de cobertura como artifact;
+- O relatório HTML do Playwright como artifact, inclusive quando os testes E2E falham.
+
+Isso permite analisar evidências de falha diretamente pelo GitHub Actions sem versionar os diretórios gerados localmente.
 
 ---
 
 ## ⚠️ Observações
 
-- A conversão depende de uma API externa de câmbio;
+- A conversão em produção depende de uma API externa de câmbio;
 - É necessário acesso à internet para o funcionamento completo da aplicação;
 - Os valores exibidos refletem as cotações atualizadas fornecidas pela API externa;
-- O histórico, favoritos e tema são persistidos no `localStorage`;
+- O histórico, favoritos, idioma e tema são persistidos no `localStorage`;
 - A URL base da API pode ser configurada pela variável `VITE_EXCHANGE_API_URL`;
 - O arquivo `.env.example` serve como modelo para configuração local do projeto;
-- Os testes automatizados utilizam mocks para validar comportamentos sem depender da API externa em tempo real;
-- O relatório de cobertura é gerado no diretório `coverage/` e deve permanecer fora do versionamento.
+- Os testes Vitest utilizam mocks para validar comportamentos sem depender da API externa em tempo real;
+- O teste E2E de conversão também utiliza interceptação de rede para manter o cenário previsível;
+- O Playwright utiliza Chromium gerenciado pela própria ferramenta, independentemente do navegador principal instalado pelo desenvolvedor;
+- `coverage/`, `playwright-report/`, `test-results/` e `blob-report/` devem permanecer fora do versionamento.
 
 ---
 
@@ -619,15 +667,23 @@ A URL base da API de câmbio foi configurada por meio da variável `VITE_EXCHANG
 
 O Vitest foi escolhido por ter integração nativa com o ecossistema Vite. A Testing Library foi utilizada para testar a aplicação a partir da perspectiva do usuário, validando interações, elementos visíveis e comportamentos importantes.
 
+### Playwright para testes E2E
+
+O Playwright foi adicionado como segunda camada de validação para executar fluxos completos da aplicação em um navegador real automatizado.
+
+A suíte utiliza Chromium gerenciado pelo Playwright e valida comportamentos que atravessam interface, estado e integração de rede. A chamada da API é interceptada no cenário de conversão para que o resultado seja reproduzível e não dependa de um serviço externo durante o teste.
+
+O relatório HTML, traces, screenshots e vídeos facilitam a investigação de falhas tanto localmente quanto no GitHub Actions.
+
 ### Cobertura de testes
 
 O projeto utiliza o provider `@vitest/coverage-v8` para gerar relatório de cobertura dos testes automatizados. Essa configuração permite acompanhar quais partes do código estão cobertas pelos testes, identificar pontos que podem receber novas validações e aplicar thresholds mínimos no pipeline para evitar regressões silenciosas.
 
 ### CI/CD com GitHub Actions
 
-A pipeline automatiza instalação, lint, tipagem, testes, cobertura e build de produção, garantindo uma base mais segura para evolução do projeto.
+A pipeline automatiza instalação, lint, tipagem, cobertura, build e testes E2E, garantindo uma base mais segura para evolução do projeto.
 
-O relatório de cobertura é publicado como artifact do workflow, permitindo consulta pelo GitHub Actions sem versionar o diretório `coverage/`.
+Os relatórios de cobertura e Playwright são publicados como artifacts do workflow, permitindo consulta pelo GitHub Actions sem versionar os diretórios gerados.
 
 ### Deploy automatizado na Vercel
 
@@ -637,7 +693,7 @@ O deploy na Vercel é atualizado automaticamente a cada alteração enviada para
 
 ## 🧾 Releases
 
-### v2.4.1 — Fechamento final, correções de UX e preparação para release \*\*Latest
+### v2.4.1 — Fechamento final, correções de UX e preparação para release **Latest**
 
 Versão focada no fechamento final do projeto, com correções de usabilidade no seletor de moedas, organização de versionamento, sincronização do branch principal e revisão completa da base antes da nova tag.
 
@@ -727,6 +783,7 @@ Lançamento inicial com as funcionalidades principais: conversão com cotações
 ## 📈 Melhorias Futuras
 
 - Adicionar testes específicos para mais componentes reutilizáveis;
+- Ampliar a suíte E2E para favoritos, histórico e cenários de erro;
 - Adicionar screenshots atualizados do tema claro e do tema escuro;
 - Adicionar gráfico de variação cambial por período;
 - Adicionar alertas de preço para pares de moedas monitorados;

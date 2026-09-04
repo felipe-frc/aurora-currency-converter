@@ -5,16 +5,27 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
   test: {
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
     css: true,
     globals: true,
+
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/e2e/**",
+      "**/playwright-report/**",
+      "**/test-results/**",
+    ],
+
     coverage: {
       thresholds: {
         lines: 80,

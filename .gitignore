@@ -25,6 +25,11 @@ dist-ssr/
 # Test coverage
 coverage/
 
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+
 # Editor directories and files
 .vscode/
 .idea/

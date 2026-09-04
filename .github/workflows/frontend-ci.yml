@@ -38,8 +38,22 @@ jobs:
       - name: Gerar build de produção
         run: npm run build
 
+      - name: Instalar Chromium do Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Executar testes E2E
+        run: npx playwright test
+
       - name: Publicar relatório de cobertura
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage
+
+      - name: Publicar relatório do Playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
