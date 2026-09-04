@@ -10,9 +10,9 @@
 
 # 💱 Aurora Currency Converter
 
-Aplicação web moderna para conversão de moedas com cotações atualizadas, interface sofisticada, histórico de operações, sistema de favoritos, alternância real entre tema claro/escuro e foco em experiência do usuário.
+Aplicação front-end desenvolvida com **React 19**, **TypeScript**, **Vite** e **Tailwind CSS**, criada para demonstrar práticas de engenharia de software aplicadas a uma interface real: separação de responsabilidades, custom hooks, integração resiliente com API externa, internacionalização, persistência local, testes automatizados e integração contínua.
 
-Desenvolvida com **React**, **TypeScript**, **Vite** e **Tailwind CSS**, a aplicação consome uma API externa de câmbio para exibir cotações atualizadas, permitindo que o usuário converta valores entre múltiplas moedas, salve pares favoritos, consulte o histórico de conversões e personalize a experiência visual com persistência de tema no navegador.
+Embora o domínio seja um conversor de moedas, o foco técnico do projeto está na construção de uma base front-end organizada, tipada e testável. A lógica principal foi isolada em hooks e services, o estado compartilhado utiliza Context API, a interface possui suporte a **pt-BR e en-US**, e o pipeline de CI valida lint, tipagem, testes com cobertura e build de produção.
 
 ---
 
@@ -31,18 +31,41 @@ A aplicação está publicada na **Vercel** com deploy automatizado a cada atual
 Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimentos em:
 
 - Desenvolvimento front-end moderno com React e TypeScript;
-- Consumo de APIs externas para dados atualizados;
-- Componentização e separação de responsabilidades;
-- Gerenciamento de estado com Context API;
-- Criação de hooks reutilizáveis;
-- Persistência de dados no `localStorage`;
-- Estilização moderna com Tailwind CSS, gradientes e glassmorphism;
-- Implementação de tema claro/escuro com variáveis CSS;
+- Arquitetura de componentes e separação de responsabilidades;
+- Criação de custom hooks reutilizáveis;
+- Gerenciamento de estado compartilhado com Context API;
+- Internacionalização com suporte a `pt-BR` e `en-US`;
+- Integração resiliente com API externa;
+- Tratamento tipado de erros, timeout e cancelamento de requisições;
+- Persistência e validação de dados no `localStorage`;
+- Tema claro/escuro com persistência da preferência do usuário;
 - Testes automatizados com Vitest e Testing Library;
-- Relatório de cobertura de testes;
+- Cobertura de testes com Vitest Coverage V8;
+- Lint, verificação de tipos e build automatizados;
 - Integração contínua com GitHub Actions;
 - Deploy automatizado com Vercel;
 - Organização profissional de código e documentação para portfólio.
+
+---
+
+## ⭐ Destaques de Engenharia
+
+- Lógica principal de conversão centralizada no custom hook `useCurrencyConverter`;
+- Hook genérico `useLocalStorage` com validação dos dados persistidos;
+- Camada de serviço dedicada para integração com a API de câmbio;
+- Erros de integração modelados por códigos tipados e tratados de forma específica;
+- Tratamento de `404`, `429`, respostas inválidas, taxa inválida e indisponibilidade de rede;
+- Cancelamento de requisições concorrentes com `AbortController`;
+- Timeout configurável para chamadas à API externa;
+- Otimização para conversões entre a mesma moeda sem requisição desnecessária;
+- Internacionalização própria com suporte a `pt-BR` e `en-US`;
+- Context API para gerenciamento global de idioma e tema;
+- Persistência de idioma, tema, favoritos e histórico no navegador;
+- Testes unitários e de integração com Vitest e Testing Library;
+- API externa mockada durante os testes automatizados;
+- Cobertura de testes com provider V8 e thresholds mínimos;
+- Pipeline de CI executando lint, type-check, testes com cobertura e build;
+- TypeScript utilizado para modelagem de domínio, contratos e estados da aplicação.
 
 ---
 
@@ -86,6 +109,16 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Tema claro com fundo suave, cards destacados, bordas visíveis e melhor contraste;
 - Tema escuro mantendo a identidade visual neon/glassmorphism do projeto.
 
+### 🌎 Internacionalização
+
+- Interface disponível em português (`pt-BR`) e inglês (`en-US`);
+- Troca de idioma em tempo de execução;
+- Persistência do idioma selecionado no `localStorage`;
+- Atualização do atributo `lang` do documento;
+- Textos centralizados em `src/i18n/translations.ts`;
+- Context API e hook `useLanguage` para consumo das traduções;
+- Testes específicos para contexto, hook e `LanguageToggle`.
+
 ### 🎨 Interface
 
 - Design moderno com glassmorphism, gradientes e elementos translúcidos;
@@ -117,23 +150,23 @@ Este projeto foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 
 ## 🛠️ Tecnologias
 
-| Camada                 | Tecnologia               |
-| ---------------------- | ------------------------ |
-| Linguagem              | TypeScript               |
-| Biblioteca             | React                    |
-| Bundler                | Vite                     |
-| Estilização            | Tailwind CSS             |
-| Componentes acessíveis | Radix UI                 |
-| Roteamento             | Wouter                   |
-| Ícones                 | Lucide React             |
-| Notificações           | Sonner                   |
-| Testes                 | Vitest + Testing Library |
-| Cobertura              | Vitest Coverage V8       |
-| Ambiente de testes     | jsdom                    |
-| Linting                | ESLint                   |
-| CI/CD                  | GitHub Actions           |
-| Deploy                 | Vercel                   |
-| Versionamento          | Git / GitHub             |
+| Camada                  | Tecnologia                |
+| ----------------------- | ------------------------- |
+| Linguagem               | TypeScript                |
+| Biblioteca              | React                     |
+| Bundler                 | Vite                      |
+| Estilização             | Tailwind CSS              |
+| Componentes acessíveis  | Radix UI                  |
+| Roteamento              | Wouter                    |
+| Ícones                  | Lucide React              |
+| Notificações            | Sonner                    |
+| Testes                  | Vitest + Testing Library  |
+| Cobertura               | Vitest Coverage V8        |
+| Ambiente de testes      | jsdom                     |
+| Linting                 | ESLint                    |
+| CI/CD                   | GitHub Actions            |
+| Deploy                  | Vercel                    |
+| Versionamento           | Git / GitHub              |
 
 ---
 
@@ -144,81 +177,95 @@ aurora-currency-converter/
 │
 ├── .github/
 │   └── workflows/
-│       └── frontend-ci.yml          # Pipeline de validação do front-end
+│       └── frontend-ci.yml              # Pipeline de validação do front-end
 │
 ├── docs/
-│   └── images/                      # Imagens utilizadas na documentação
+│   └── images/                          # Imagens utilizadas na documentação
 │       ├── conversion.png
 │       ├── dark-theme.png
 │       ├── history.png
 │       ├── home.png
 │       └── light-theme.png
 │
-├── public/                          # Arquivos públicos
+├── public/                              # Arquivos públicos
 │
 ├── src/
 │   ├── components/
-│   │   ├── currency/                # Componentes específicos do conversor
+│   │   ├── currency/                    # Componentes do domínio de conversão
 │   │   │   ├── CurrencyResult.tsx
 │   │   │   ├── CurrencySelect.tsx
 │   │   │   ├── FavoritesList.tsx
 │   │   │   ├── FlagImage.tsx
 │   │   │   └── HistoryList.tsx
 │   │   │
-│   │   ├── theme/                   # Componentes relacionados ao tema
+│   │   ├── language/                    # Controle de idioma
+│   │   │   ├── LanguageToggle.tsx
+│   │   │   └── LanguageToggle.test.tsx
+│   │   │
+│   │   ├── theme/                       # Controle de tema
 │   │   │   ├── ThemeToggle.tsx
 │   │   │   └── ThemeToggle.test.tsx
 │   │   │
-│   │   ├── ui/                      # Componentes base de interface
+│   │   ├── ui/                          # Componentes base de interface
 │   │   │   ├── button.tsx
 │   │   │   ├── card.tsx
 │   │   │   ├── input.tsx
 │   │   │   ├── select.tsx
 │   │   │   └── sonner.tsx
 │   │   │
-│   │   └── ErrorBoundary.tsx        # Tratamento de erro em componentes React
+│   │   └── ErrorBoundary.tsx            # Tratamento de erro em componentes React
 │   │
-│   ├── contexts/                    # Contextos globais da aplicação
-│   │   ├── theme.ts                 # Tipos, chave de storage e contexto de tema
-│   │   ├── ThemeContext.tsx         # Provider do tema
-│   │   ├── ThemeContext.test.tsx    # Testes do contexto de tema
-│   │   └── useTheme.ts              # Hook para consumir o tema
+│   ├── contexts/                        # Estado compartilhado da aplicação
+│   │   ├── LanguageContext.tsx
+│   │   ├── ThemeContext.tsx
+│   │   ├── ThemeContext.test.tsx
+│   │   ├── language.ts
+│   │   ├── theme.ts
+│   │   ├── useLanguage.ts
+│   │   ├── useLanguage.test.tsx
+│   │   ├── useTheme.ts
+│   │   └── useTheme.test.tsx
 │   │
 │   ├── data/
-│   │   └── currencies.ts            # Lista de moedas e helpers de moeda
+│   │   └── currencies.ts                # Lista de moedas e helpers
 │   │
 │   ├── hooks/
-│   │   ├── useLocalStorage.ts       # Hook reutilizável para localStorage
-│   │   └── useLocalStorage.test.tsx # Testes do hook
+│   │   ├── useCurrencyConverter.ts      # Orquestra regras e estado do conversor
+│   │   ├── useCurrencyConverter.test.tsx
+│   │   ├── useLocalStorage.ts           # Persistência reutilizável
+│   │   └── useLocalStorage.test.tsx
+│   │
+│   ├── i18n/
+│   │   └── translations.ts              # Textos pt-BR/en-US e tipos de tradução
 │   │
 │   ├── lib/
-│   │   └── utils.ts                 # Utilitário para composição de classes
+│   │   └── utils.ts                     # Utilitário para composição de classes
 │   │
 │   ├── pages/
-│   │   ├── Home.tsx                 # Página principal da aplicação
-│   │   └── NotFound.tsx             # Página 404
+│   │   ├── Home.tsx                     # Página principal
+│   │   └── NotFound.tsx                 # Página 404
 │   │
 │   ├── services/
-│   │   ├── exchangeService.ts       # Comunicação e validação da API de câmbio
-│   │   └── exchangeService.test.ts  # Testes do service de câmbio
+│   │   ├── exchangeService.ts           # Integração resiliente com API de câmbio
+│   │   └── exchangeService.test.ts
 │   │
 │   ├── test/
-│   │   ├── Home.test.tsx            # Testes da página principal
-│   │   └── setup.ts                 # Setup global dos testes
+│   │   ├── Home.test.tsx                # Testes da experiência principal
+│   │   └── setup.ts                     # Setup global dos testes
 │   │
 │   ├── types/
-│   │   └── currency.ts              # Tipos de moeda, favoritos e conversões
+│   │   └── currency.ts                  # Tipos do domínio
 │   │
 │   ├── utils/
-│   │   ├── formatCurrency.ts        # Helpers de formatação monetária
-│   │   └── formatCurrency.test.ts   # Testes dos helpers
+│   │   ├── formatCurrency.ts            # Helpers de formatação monetária
+│   │   └── formatCurrency.test.ts
 │   │
-│   ├── App.tsx                      # Componente raiz, rotas, provider e tema
-│   ├── index.css                    # Estilos globais, variáveis e temas
-│   ├── main.tsx                     # Entry point da aplicação
-│   └── vite-env.d.ts                # Tipagens do Vite
+│   ├── App.tsx                          # Rotas e providers globais
+│   ├── index.css                        # Estilos globais, variáveis e temas
+│   ├── main.tsx                         # Entry point
+│   └── vite-env.d.ts                    # Tipagens do Vite
 │
-├── .env.example                     # Exemplo de variável de ambiente da API
+├── .env.example                         # Exemplo de configuração da API
 ├── .gitignore
 ├── eslint.config.js
 ├── index.html
@@ -288,7 +335,9 @@ Painel de histórico com o registro das conversões realizadas, incluindo par de
 ### 1. Clone o repositório
 
 ```bash
+
 git clone https://github.com/felipe-frc/aurora-currency-converter.git
+
 ```
 
 ---
@@ -296,7 +345,9 @@ git clone https://github.com/felipe-frc/aurora-currency-converter.git
 ### 2. Acesse a pasta do projeto
 
 ```bash
+
 cd aurora-currency-converter
+
 ```
 
 ---
@@ -306,13 +357,17 @@ cd aurora-currency-converter
 Para instalação reprodutível usando o `package-lock.json`:
 
 ```bash
+
 npm ci
+
 ```
 
 Ou, se preferir instalar de forma tradicional durante o desenvolvimento:
 
 ```bash
+
 npm install
+
 ```
 
 ---
@@ -324,43 +379,55 @@ Crie um arquivo `.env` na raiz do projeto com base no arquivo `.env.example`.
 No Windows:
 
 ```bash
+
 copy .env.example .env
+
 ```
 
 No Linux/macOS:
 
 ```bash
+
 cp .env.example .env
+
 ```
 
 O arquivo `.env` deve conter:
 
 ```env
+
 VITE_EXCHANGE_API_URL=https://api.exchangerate-api.com/v4/latest
+
 ```
 
-> A API utilizada nesta versão não exige chave de autenticação. A variável acima permite configurar a URL base da API de câmbio usada pela aplicação.
+_> A API utilizada nesta versão não exige chave de autenticação. A variável acima permite configurar a URL base da API de câmbio usada pela aplicação._
 
 ---
 
 ### 5. Execute o projeto em modo de desenvolvimento
 
 ```bash
+
 npm run dev
+
 ```
 
 Após iniciar, o terminal exibirá uma URL parecida com:
 
 ```txt
+
 VITE ready in Xms
 
-➜  Local:   http://localhost:5173/
+➜  Local:   http://localhost:5173/
+
 ```
 
 Abra essa URL no navegador:
 
 ```txt
+
 http://localhost:5173
+
 ```
 
 ---
@@ -368,7 +435,9 @@ http://localhost:5173
 ### 6. Gere o build de produção
 
 ```bash
+
 npm run build
+
 ```
 
 ---
@@ -376,7 +445,9 @@ npm run build
 ### 7. Execute o lint
 
 ```bash
+
 npm run lint
+
 ```
 
 ---
@@ -384,7 +455,9 @@ npm run lint
 ### 8. Execute a verificação de tipos
 
 ```bash
+
 npm run type-check
+
 ```
 
 ---
@@ -394,48 +467,52 @@ npm run type-check
 Para executar os testes uma única vez:
 
 ```bash
+
 npm run test:run
+
 ```
 
 Para executar os testes em modo observação durante o desenvolvimento:
 
 ```bash
+
 npm run test
+
 ```
 
 Para executar os testes com relatório de cobertura:
 
 ```bash
+
 npm run test:coverage
+
 ```
 
 ---
 
 ## 🧪 Testes Automatizados
 
-O projeto possui testes automatizados configurados com **Vitest**, **Testing Library**, **jsdom** e **Vitest Coverage V8**, garantindo mais confiabilidade na evolução da aplicação.
+O projeto possui testes automatizados configurados com **Vitest**, **Testing Library**, **jsdom** e **Vitest Coverage V8**, com foco tanto em comportamento visível quanto nas unidades responsáveis pela lógica da aplicação.
 
 Os testes atuais cobrem:
 
 - Renderização da tela principal do conversor;
-- Exibição do título, subtítulo, campo de valor e botões principais;
 - Conversão de moedas com retorno de API mockado;
-- Verificação da chamada correta para a API de câmbio;
-- Exibição do resultado da conversão;
-- Exibição da taxa de câmbio utilizada;
-- Registro da conversão no histórico;
-- Salvamento de par de moedas como favorito;
-- Carregamento de histórico salvo no `localStorage`;
-- Validação para impedir conversão com valor inválido;
-- Tratamento de erro quando a API retorna falha;
-- Validação do service `fetchExchangeRate`;
-- Validação do hook `useLocalStorage`;
-- Validação dos helpers `formatCurrency` e `formatExchangeRate`;
-- Validação do `ThemeProvider`;
-- Validação do hook `useTheme`;
-- Validação do componente `ThemeToggle`.
+- Verificação das chamadas realizadas para a API de câmbio;
+- Exibição do resultado e da taxa de câmbio;
+- Registro de conversões no histórico;
+- Salvamento e remoção de favoritos;
+- Carregamento de dados persistidos no `localStorage`;
+- Validação para impedir conversões com valor inválido;
+- Tratamento de falhas da API;
+- Service `fetchExchangeRate`, incluindo cenários de erro;
+- Hook `useCurrencyConverter`;
+- Hook `useLocalStorage`;
+- Helpers `formatCurrency` e `formatExchangeRate`;
+- `LanguageProvider`, hook `useLanguage` e `LanguageToggle`;
+- `ThemeProvider`, hook `useTheme` e `ThemeToggle`.
 
-A configuração dos testes está integrada ao Vite por meio do `vite.config.ts`, utilizando ambiente `jsdom` para simular o navegador durante a execução dos testes.
+A configuração dos testes está integrada ao Vite por meio do `vite.config.ts`, utilizando ambiente `jsdom` para simular o navegador. As chamadas externas são mockadas nos testes para que a suíte não dependa da disponibilidade da API real.
 
 O relatório de cobertura pode ser gerado localmente com:
 
@@ -454,11 +531,17 @@ O projeto possui pipeline de integração contínua com **GitHub Actions**.
 A cada `push` ou `pull_request` para a branch `main`, o workflow executa:
 
 ```bash
+
 npm ci
+
 npm run lint
+
 npm run type-check
+
 npm run test:coverage
+
 npm run build
+
 ```
 
 Isso garante que o projeto só evolua com lint, tipagem, suíte de testes com cobertura e build de produção funcionando corretamente.
@@ -494,11 +577,11 @@ O Vite foi adotado como ferramenta de build por oferecer tempo de inicializaçã
 
 A combinação de Tailwind CSS com Radix UI permite construir uma interface estilizada, responsiva e acessível. O Radix UI fornece a base comportamental dos componentes, enquanto o Tailwind concentra a estilização visual.
 
-### Service para API de câmbio
+### Service resiliente para API de câmbio
 
-A comunicação com a API externa foi separada em `exchangeService.ts`, isolando a montagem da URL, a chamada `fetch`, a validação da resposta HTTP, timeout configurável, cancelamento com `AbortController` e o tratamento de taxas inválidas.
+A comunicação com a API externa foi separada em `exchangeService.ts`, isolando montagem de URL, chamada `fetch`, validação da resposta, timeout configurável, cancelamento com `AbortController` e classificação tipada de falhas.
 
-Essa separação deixa a `Home.tsx` mais limpa e facilita a criação de testes automatizados para a integração com a API.
+O service diferencia cenários como moeda inexistente, rate limit, JSON inválido, moeda não suportada, taxa inválida, timeout e falha de rede. Essa separação reduz o acoplamento da interface e permite testar a integração de forma determinística.
 
 ### Hook `useLocalStorage`
 
@@ -513,6 +596,12 @@ As regras de conversão, favoritos, histórico, cancelamento de requisições e 
 O tema claro/escuro foi implementado com Context API, persistência no `localStorage` e aplicação global das classes `dark` e `light` no `document.documentElement`.
 
 A estrutura foi separada em `theme.ts`, `ThemeContext.tsx` e `useTheme.ts` para manter compatibilidade com Fast Refresh e evitar problemas no CI.
+
+### Internacionalização com Context API
+
+A internacionalização foi implementada sem acoplar textos diretamente aos componentes. As traduções ficam centralizadas em `src/i18n/translations.ts`, enquanto `LanguageContext` e `useLanguage` fornecem o idioma ativo e a função de tradução para a interface.
+
+A preferência do usuário é persistida no `localStorage`, e o atributo `lang` do documento é atualizado de acordo com `pt-BR` ou `en-US`, mantendo a experiência consistente entre sessões.
 
 ### Formatação monetária com Intl
 
@@ -548,7 +637,7 @@ O deploy na Vercel é atualizado automaticamente a cada alteração enviada para
 
 ## 🧾 Releases
 
-### v2.4.1 — Fechamento final, correções de UX e preparação para release **Latest**
+### v2.4.1 — Fechamento final, correções de UX e preparação para release \*\*Latest
 
 Versão focada no fechamento final do projeto, com correções de usabilidade no seletor de moedas, organização de versionamento, sincronização do branch principal e revisão completa da base antes da nova tag.
 
